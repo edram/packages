@@ -1,0 +1,15 @@
+{
+  "name": "@edram/tsconfig",
+  "version": "0.0.1",
+  "description": "Shared TypeScript config for my projects",
+  "keywords": [],
+  "author": {
+    "name": "edram",
+    "email": "edram@qq.com"
+  },
+  "license": "MIT",
+  "files": [
+    "init.json",
+    "tsconfig.json"
+  ]
+}
