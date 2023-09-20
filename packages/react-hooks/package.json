@@ -1,0 +1,23 @@
+{
+  "name": "@edram/react-hooks",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
+  "types": "./lib/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "lib/",
+    "esm/"
+  ],
+  "scripts": {
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "tsc --outDir lib --target es5",
+    "build:esm": "tsc -m esNext --outDir esm"
+  },
+  "devDependencies": {
+    "@edram/tsconfig": "workspace:^",
+    "@types/react": "^18.2.22",
+    "typescript": "^5.2.2"
+  }
+}
