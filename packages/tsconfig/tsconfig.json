@@ -10,6 +10,8 @@
     /* Modules */
     "module": "node16",
     "moduleResolution": "node16",
+    /* Emit */
+    "declaration": true,
     /* Interop Constraints */
     "forceConsistentCasingInFileNames": true,
     /* Completeness */
