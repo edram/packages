@@ -13,11 +13,17 @@
   "scripts": {
     "build": "pnpm build:cjs && pnpm build:esm",
     "build:cjs": "tsc --outDir lib --target es5",
-    "build:esm": "tsc -m esNext --outDir esm"
+    "build:esm": "tsc -m esNext --outDir esm",
+    "test": "vitest"
   },
   "devDependencies": {
     "@edram/tsconfig": "workspace:^",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/react": "^18.2.22",
-    "typescript": "^5.2.2"
+    "jsdom": "^22.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4"
   }
 }
