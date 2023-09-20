@@ -3,7 +3,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "module": "CommonJS",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "./src/**/*"
