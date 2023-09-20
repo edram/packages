@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.2
+
+### Patch Changes
+
+- [#6](https://github.com/edram/packages/pull/6) [`47ac8f1`](https://github.com/edram/packages/commit/47ac8f17159c38c6d1663d8a6510b7ab51dd4f49) Thanks [@edram](https://github.com/edram)! - test: 增加测试用户
+
 ## 0.0.1
 
 ### Patch Changes
