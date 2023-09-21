@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.3
+
+### Patch Changes
+
+- [#12](https://github.com/edram/packages/pull/12) [`4247b56`](https://github.com/edram/packages/commit/4247b569e6fdeab178bd2d14f35a978ba121681a) Thanks [@edram](https://github.com/edram)! - build(react-hooks): add eslint and prettier
+
 ## 0.0.2
 
 ### Patch Changes
