@@ -2,7 +2,7 @@
   "name": "eslint-config-edram",
   "license": "MIT",
   "repository": "edram/packages",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "files": [],
   "dependencies": {
