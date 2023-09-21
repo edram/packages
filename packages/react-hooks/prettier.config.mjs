@@ -1,3 +1,3 @@
-import config from "@edram/prettier";
+import config from '@edram/prettier';
 
 export default config;
