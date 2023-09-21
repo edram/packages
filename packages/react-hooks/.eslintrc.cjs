@@ -1,11 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
-  extends: [
-    "edram",
-  ],
-  env: {
-    node: true
-  }
+  extends: ['edram/prettier'],
 };
 
 module.exports = config;

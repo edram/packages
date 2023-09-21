@@ -1,14 +1,14 @@
-import { act, renderHook } from "@testing-library/react-hooks";
-import useUpdate from "./useUpdate";
+import { act, renderHook } from '@testing-library/react-hooks';
+import useUpdate from './useUpdate';
 
-describe("useUpdate", () => {
-  it("useUpdate 的返回值应该是一个方法", () => {
+describe('useUpdate', () => {
+  it('useUpdate 的返回值应该是一个方法', () => {
     const { result } = renderHook(() => useUpdate());
 
-    expect(typeof result.current).toBe("function");
+    expect(typeof result.current).toBe('function');
   });
 
-  it("每次调用 update ，应该会重新渲染", () => {
+  it('每次调用 update ，应该会重新渲染', () => {
     let renders = 0;
     const { result } = renderHook(() => {
       renders++;
