@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.4
+
+### Patch Changes
+
+- [#16](https://github.com/edram/packages/pull/16) [`091bfdb`](https://github.com/edram/packages/commit/091bfdb6bd3da59f393570047dc593e4a1f7bf09) Thanks [@edram](https://github.com/edram)! - build(react-hooks): add eslint
+
 ## 0.0.3
 
 ### Patch Changes
