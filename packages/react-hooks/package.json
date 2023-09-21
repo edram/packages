@@ -12,8 +12,8 @@
   ],
   "scripts": {
     "build": "pnpm build:cjs && pnpm build:esm",
-    "build:cjs": "tsc --outDir lib --target es5",
-    "build:esm": "tsc -m esNext --outDir esm",
+    "build:cjs": "tsc -p tsconfig.build.json --outDir lib --target es5",
+    "build:esm": "tsc -p tsconfig.build.json -m esNext --outDir esm",
     "test": "vitest"
   },
   "devDependencies": {
