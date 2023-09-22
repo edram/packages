@@ -1,5 +1,11 @@
 # @edram/tsconfig
 
+## 0.0.5
+
+### Patch Changes
+
+- [#18](https://github.com/edram/packages/pull/18) [`dbe9c32`](https://github.com/edram/packages/commit/dbe9c3298de101d4bb7226edc7c8351efe766855) Thanks [@edram](https://github.com/edram)! - fix: extends @edram/tsconfig
+
 ## 0.0.4
 
 ### Patch Changes
