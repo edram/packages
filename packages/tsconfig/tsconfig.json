@@ -2,11 +2,7 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "ES2021", // Node.js 16
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2021"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2021"],
     /* Modules */
     "module": "node16",
     "moduleResolution": "node16",
@@ -17,6 +13,6 @@
     /* Completeness */
     "skipLibCheck": true,
     /* Type Checking */
-    "strict": true,
+    "strict": true
   }
 }
