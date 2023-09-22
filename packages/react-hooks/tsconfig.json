@@ -1,4 +1,5 @@
 {
+  "extends": "@edram/tsconfig",
   "compilerOptions": {
     "rootDir": "./src",
     "module": "CommonJS",
