@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.3
+
+### Patch Changes
+
+- [#20](https://github.com/edram/packages/pull/20) [`859965d`](https://github.com/edram/packages/commit/859965db68f765ac8525050e3c004376cd8dc306) Thanks [@edram](https://github.com/edram)! - chore: 增加 react 配置
+
 ## 0.0.2
 
 ### Patch Changes
