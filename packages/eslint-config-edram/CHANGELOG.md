@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.5
+
+### Patch Changes
+
+- [#24](https://github.com/edram/packages/pull/24) [`d60a02e`](https://github.com/edram/packages/commit/d60a02e5c16d1299e78b500f57d468330b7a7b3f) Thanks [@edram](https://github.com/edram)! - refactor(eslint): disable react/prop-types
+
 ## 0.0.4
 
 ### Patch Changes
