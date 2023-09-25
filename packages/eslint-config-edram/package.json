@@ -5,7 +5,8 @@
   "license": "MIT",
   "main": "index.js",
   "files": [
-    "prettier.js"
+    "prettier.js",
+    "rules"
   ],
   "prettier": "@edram/prettier",
   "dependencies": {
