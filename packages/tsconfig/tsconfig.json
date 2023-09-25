@@ -3,6 +3,7 @@
     /* Language and Environment */
     "target": "ES2021", // Node.js 16
     "lib": ["DOM", "DOM.Iterable", "ES2021"],
+    "jsx": "preserve",
     /* Modules */
     "module": "node16",
     "moduleResolution": "node16",
