@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.4
+
+### Patch Changes
+
+- [#22](https://github.com/edram/packages/pull/22) [`c597a11`](https://github.com/edram/packages/commit/c597a1124d6b08ab9f8f847e3cea38853d5fd156) Thanks [@edram](https://github.com/edram)! - fix(eslint): 修复未引入 rules 的 bug
+
 ## 0.0.3
 
 ### Patch Changes
