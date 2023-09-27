@@ -18,6 +18,19 @@ importers:
         specifier: latest
         version: 1.10.14
 
+  packages/cli:
+    dependencies:
+      commander:
+        specifier: ^11.0.0
+        version: 11.0.0
+    devDependencies:
+      '@edram/prettier':
+        specifier: workspace:^
+        version: link:../prettier
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+
   packages/eslint-config-edram:
     dependencies:
       '@typescript-eslint/eslint-plugin':
@@ -1282,6 +1295,11 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
     dev: true
+
+  /commander@11.0.0:
+    resolution: {integrity: sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==}
+    engines: {node: '>=16'}
+    dev: false
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
