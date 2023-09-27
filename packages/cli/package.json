@@ -1,0 +1,21 @@
+{
+  "name": "@edram/cli",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "repository": "edram/packages",
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "bin": {
+    "edramdev": "bin/edramdev.mjs"
+  },
+  "prettier": "@edram/prettier",
+  "dependencies": {
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {
+    "@edram/prettier": "workspace:^",
+    "prettier": "^3.0.3"
+  }
+}
