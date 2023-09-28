@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.7
+
+### Patch Changes
+
+- [`89ef740`](https://github.com/edram/packages/commit/89ef7402a85e9d49812061b40577c577d535355b) Thanks [@edram](https://github.com/edram)! - chore: add typings 配置, next 打包时发现 eslint 报类型
+
 ## 0.0.6
 
 ### Patch Changes
