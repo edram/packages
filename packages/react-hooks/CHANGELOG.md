@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.8
+
+### Patch Changes
+
+- [`4b86688`](https://github.com/edram/packages/commit/4b8668882c63016df6ce6ebf4e22638a600ec6d2) Thanks [@edram](https://github.com/edram)! - refactor: 单元测试移动到 tests 文件夹中
+
 ## 0.0.7
 
 ### Patch Changes
