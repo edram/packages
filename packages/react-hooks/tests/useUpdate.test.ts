@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks';
-import useUpdate from './useUpdate';
+import { useUpdate } from '../src';
 
 describe('useUpdate', () => {
   it('useUpdate 的返回值应该是一个方法', () => {

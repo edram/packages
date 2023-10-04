@@ -1,11 +1,11 @@
 {
   "extends": "@edram/tsconfig",
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "./",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "types": ["vitest/globals"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./tests/**/*"],
   "exclude": ["dist", "node_modules"]
 }
