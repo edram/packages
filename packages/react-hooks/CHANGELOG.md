@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.9
+
+### Patch Changes
+
+- [`d7ddd44`](https://github.com/edram/packages/commit/d7ddd44b4dc187d81b9d54d690b1f221c3ccc2ec) Thanks [@edram](https://github.com/edram)! - feat(react-hooks): add useClickAway hook
+
 ## 0.0.8
 
 ### Patch Changes
