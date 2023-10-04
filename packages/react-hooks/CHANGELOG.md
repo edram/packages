@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.10
+
+### Patch Changes
+
+- [`35fe006`](https://github.com/edram/packages/commit/35fe006c9340fe1a5f9246a4f14a1c2b788c9aac) Thanks [@edram](https://github.com/edram)! - fix(react-hooks): export useClickAway
+
 ## 0.0.9
 
 ### Patch Changes
