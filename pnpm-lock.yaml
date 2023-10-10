@@ -76,6 +76,10 @@ importers:
         version: 3.0.3
 
   packages/react-hooks:
+    dependencies:
+      '@edram/react-utils':
+        specifier: workspace:^
+        version: link:../react-utils
     devDependencies:
       '@edram/prettier':
         specifier: workspace:^
