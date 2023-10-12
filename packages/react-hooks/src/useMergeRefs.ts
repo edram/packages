@@ -9,7 +9,7 @@ export function mergeRefs<T>(...refs: PossibleRef<T>[]) {
   };
 }
 
-export function useMergedRefs<T>(...refs: PossibleRef<T>[]) {
+export default function useMergeRefs<T>(...refs: PossibleRef<T>[]) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(mergeRefs(...refs), refs);
 }
