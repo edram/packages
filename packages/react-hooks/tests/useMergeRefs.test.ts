@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { MutableRefObject, createRef } from 'react';
-import { useMergedRef } from '../src/useMergeRefs';
+import { useMergedRefs } from '../src/useMergeRefs';
 
 describe('useMergeRefs', () => {
   it('多个 ref 可以同时初始化相同值', () => {
@@ -8,7 +8,7 @@ describe('useMergeRefs', () => {
     const ref2 = createRef() as MutableRefObject<number>;
 
     const { result } = renderHook(() => {
-      return useMergedRef(ref1, ref2);
+      return useMergedRefs(ref1, ref2);
     });
 
     const setRef = result.current;
