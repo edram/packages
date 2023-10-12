@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.12
+
+### Patch Changes
+
+- [`f8ecb0f`](https://github.com/edram/packages/commit/f8ecb0facee29c4e114515ee4fc22467917af027) Thanks [@edram](https://github.com/edram)! - fix: 导出 useMergeRefs
+
 ## 0.0.11
 
 ### Patch Changes
