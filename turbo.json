@@ -6,9 +6,12 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "dependsOn": ["^build"]
     },
+    "@edram/react-hooks#build": {
+      "dependsOn": ["@edram/react-utils#build"]
+    },
     "test": {
       "outputs": ["coverage/**"],
-      "dependsOn": []
+      "dependsOn": ["build"]
     },
     "lint": {},
     "dev": {
