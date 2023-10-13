@@ -1,5 +1,6 @@
 import { assignRef } from '@edram/react-utils';
-import { Ref, useCallback } from 'react';
+import type { Ref } from 'react';
+import { useCallback } from 'react';
 
 type PossibleRef<T> = Ref<T> | undefined;
 

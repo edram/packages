@@ -10,6 +10,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:import/react',
     require.resolve('./rules/react'),
+    require.resolve('./rules/typescript'),
   ],
   env: {
     browser: true,

@@ -18,6 +18,10 @@
     "lint": "eslint src/",
     "test": "vitest run"
   },
+  "prettier": "@edram/prettier",
+  "dependencies": {
+    "@edram/react-utils": "workspace:^"
+  },
   "devDependencies": {
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
@@ -36,8 +40,5 @@
   "peerDependencies": {
     "react": "^16.8.0  || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0  || ^17.0.0 || ^18.0.0"
-  },
-  "dependencies": {
-    "@edram/react-utils": "workspace:^"
   }
 }
