@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.6
+
+### Patch Changes
+
+- [`0ee8b24`](https://github.com/edram/packages/commit/0ee8b24493492a6cbbd108855c0944129762bc7a) Thanks [@edram](https://github.com/edram)! - feat: eslint 增加 consistent-type-imports 规则
+
 ## 0.0.5
 
 ### Patch Changes
