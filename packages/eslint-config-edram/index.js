@@ -4,10 +4,11 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
 
+    // 'plugin:jsx-a11y/recommended',
+
     // react
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended',
     'plugin:import/react',
     require.resolve('./rules/react'),
     require.resolve('./rules/typescript'),
