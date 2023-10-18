@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.7
+
+### Patch Changes
+
+- [`21569f4`](https://github.com/edram/packages/commit/21569f41ada2d39ed64d0e1243b112d401579ef2) Thanks [@edram](https://github.com/edram)! - fix: 移除 jsx-a11y
+
 ## 0.0.6
 
 ### Patch Changes
