@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.8
+
+### Patch Changes
+
+- [`94b6e67`](https://github.com/edram/packages/commit/94b6e678d3e831e3c035b7bf36c2c9fe92630a72) Thanks [@edram](https://github.com/edram)! - feat: prettier 的 endOfLine 规则改成 auto 兼容 windows
+
 ## 0.0.7
 
 ### Patch Changes
