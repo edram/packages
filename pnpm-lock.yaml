@@ -170,6 +170,10 @@ importers:
         version: 0.34.4(jsdom@22.1.0)
 
   packages/react-utils:
+    dependencies:
+      '@edram/utils':
+        specifier: workspace:^
+        version: link:../utils
     devDependencies:
       '@edram/prettier':
         specifier: workspace:^

@@ -19,6 +19,9 @@
     "test": "vitest run"
   },
   "prettier": "@edram/prettier",
+  "dependencies": {
+    "@edram/utils": "workspace:^"
+  },
   "devDependencies": {
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
