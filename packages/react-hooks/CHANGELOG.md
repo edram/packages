@@ -1,5 +1,12 @@
 # @edram/react-hooks
 
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies [[`36366cd`](https://github.com/edram/packages/commit/36366cdc64d12c5e0484f57bafe081c71ec624df)]:
+  - @edram/react-utils@0.0.2
+
 ## 0.0.14
 
 ### Patch Changes
