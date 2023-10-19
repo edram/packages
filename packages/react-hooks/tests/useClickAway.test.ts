@@ -80,7 +80,7 @@ describe('useClickAway', () => {
     container1.click();
     expect(handleClickAway).toHaveBeenCalledTimes(0);
     container2.click();
-    expect(handleClickAway).toHaveBeenCalledTimes(1);
+    expect(handleClickAway).toHaveBeenCalledTimes(0);
 
     away.click();
     expect(handleClickAway).toHaveBeenCalledTimes(1);

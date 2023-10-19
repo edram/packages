@@ -9,6 +9,9 @@
     "@edram/react-hooks#build": {
       "dependsOn": ["@edram/react-utils#build"]
     },
+    "@edram/react-utils#build": {
+      "dependsOn": ["@edram/utils#build"]
+    },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": ["build"]
