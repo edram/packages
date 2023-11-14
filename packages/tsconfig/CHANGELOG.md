@@ -1,5 +1,11 @@
 # @edram/tsconfig
 
+## 0.0.7
+
+### Patch Changes
+
+- [`44332ee`](https://github.com/edram/packages/commit/44332eea8d51e74942a4a99b1d05636c40cce6c3) Thanks [@edram](https://github.com/edram)! - feat: 增加 useCopyToClipboard hook
+
 ## 0.0.6
 
 ### Patch Changes

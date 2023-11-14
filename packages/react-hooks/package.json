@@ -1,6 +1,6 @@
 {
   "name": "@edram/react-hooks",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "license": "MIT",
   "sideEffects": false,
   "main": "./lib/index.js",

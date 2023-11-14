@@ -1,5 +1,14 @@
 # @edram/react-hooks
 
+## 0.0.16
+
+### Patch Changes
+
+- [`44332ee`](https://github.com/edram/packages/commit/44332eea8d51e74942a4a99b1d05636c40cce6c3) Thanks [@edram](https://github.com/edram)! - feat: 增加 useCopyToClipboard hook
+
+- Updated dependencies []:
+  - @edram/react-utils@0.0.2
+
 ## 0.0.15
 
 ### Patch Changes
