@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { MutableRefObject, createRef } from 'react';
+import type { MutableRefObject } from 'react';
+import { createRef } from 'react';
 import { useMergeRefs } from '../src';
 
 describe('useMergeRefs', () => {
