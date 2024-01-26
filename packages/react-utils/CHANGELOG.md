@@ -1,5 +1,12 @@
 # @edram/react-utils
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`b856fa6`](https://github.com/edram/packages/commit/b856fa6e6e71fd779ed101d91cafc5319b2aaf0c)]:
+  - @edram/utils@0.0.2
+
 ## 0.0.2
 
 ### Patch Changes
