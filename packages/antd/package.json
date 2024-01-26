@@ -1,0 +1,48 @@
+{
+  "name": "@edram/antd",
+  "version": "0.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "lib/",
+    "esm/"
+  ],
+  "scripts": {
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "tsc -p tsconfig.build.json --outDir lib --target es5",
+    "build:esm": "tsc -p tsconfig.build.json -m esNext --outDir esm",
+    "dev": "tsc -p tsconfig.build.json -m esNext --outDir esm --watch",
+    "lint": "eslint src/",
+    "test": "vitest run"
+  },
+  "prettier": "@edram/prettier",
+  "devDependencies": {
+    "@edram/prettier": "workspace:^",
+    "@edram/tsconfig": "workspace:^",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@types/node": "^20.6.3",
+    "@types/react": "^18.2.28",
+    "@vitejs/plugin-react": "^4.1.0",
+    "antd": "^5.13.2",
+    "eslint": "^8.49.0",
+    "eslint-config-edram": "workspace:^",
+    "jsdom": "^22.1.0",
+    "prettier": "^3.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4"
+  },
+  "peerDependencies": {
+    "antd": "^5.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "dependencies": {
+    "@edram/utils": "workspace:^"
+  }
+}

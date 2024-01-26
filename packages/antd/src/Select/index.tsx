@@ -1,6 +1,8 @@
+import React from 'react';
 import type { SelectProps as AntSelectProps } from 'antd';
 import { Select as AntSelect } from 'antd';
 import type { DefaultOptionType } from 'antd/es/select';
+import { isArray } from '@edram/utils';
 import { useMemo, useState } from 'react';
 
 export type SelectProps = AntSelectProps & {
@@ -34,6 +36,10 @@ const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
     return result;
   }, [allowCreate, newOptions, props.options, searchValue]);
 
+  if (allowCreate !== true) {
+    return <AntSelect {...props} />;
+  }
+
   return (
     <AntSelect
       {...props}
@@ -43,7 +49,7 @@ const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
           setNewOptions([]);
         }
         if (option != undefined) {
-          const selectOptions = Array.isArray(option) ? option : [option];
+          const selectOptions = isArray(option) ? option : [option];
           // 不在 props.options 里的代表是新建的
           const newOptions: DefaultOptionType[] = [];
           for (const item of selectOptions) {
@@ -51,10 +57,9 @@ const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
               newOptions.push(item);
             }
           }
-
           setNewOptions(newOptions);
         }
-        console.log(value, option);
+
         props.onChange?.(value, option);
       }}
       searchValue={searchValue}

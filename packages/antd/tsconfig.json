@@ -1,0 +1,10 @@
+{
+  "extends": "@edram/tsconfig",
+  "compilerOptions": {
+    "rootDir": "./",
+    "jsx": "react",
+    "types": ["vitest/globals", "react"]
+  },
+  "include": ["./src/**/*", "./test/**/*"],
+  "exclude": ["dist", "node_modules"]
+}
