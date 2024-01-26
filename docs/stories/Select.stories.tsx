@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Select as Componnet } from '@edram/antd';
+import { Select as Component } from '@edram/antd';
 
-const meta: Meta<typeof Componnet> = {
-  component: Componnet,
+const meta: Meta<typeof Component> = {
+  component: Component,
 };
 
 export default meta;
-type Story = StoryObj<typeof Componnet>;
+type Story = StoryObj<typeof Component>;
 
 export const Select: Story = {
   args: {
