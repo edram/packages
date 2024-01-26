@@ -12,12 +12,14 @@
   },
   "prettier": "@edram/prettier",
   "dependencies": {
+    "@ant-design/pro-components": "^2.6.48",
     "@edram/antd": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@edram/prettier": "workspace:^",
+    "@edram/tsconfig": "workspace:^",
     "@storybook/addon-essentials": "^7.6.10",
     "@storybook/addon-interactions": "^7.6.10",
     "@storybook/addon-links": "^7.6.10",
@@ -26,6 +28,7 @@
     "@storybook/react": "^7.6.10",
     "@storybook/react-vite": "^7.6.10",
     "@storybook/test": "^7.6.10",
+    "@types/react": "^18.2.48",
     "prettier": "^3.0.3",
     "storybook": "^7.6.10",
     "typescript": "^5.2.2"

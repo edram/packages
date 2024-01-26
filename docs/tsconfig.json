@@ -1,0 +1,10 @@
+{
+  "extends": "@edram/tsconfig",
+  "compilerOptions": {
+    "rootDir": "./",
+    "jsx": "preserve",
+    "types": ["react"]
+  },
+  "include": ["./stories/**/*"],
+  "exclude": ["dist", "node_modules"]
+}
