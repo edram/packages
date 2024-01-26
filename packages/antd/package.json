@@ -15,8 +15,7 @@
     "build:cjs": "tsc -p tsconfig.build.json --outDir lib --target es5",
     "build:esm": "tsc -p tsconfig.build.json -m esNext --outDir esm",
     "dev": "tsc -p tsconfig.build.json -m esNext --outDir esm --watch",
-    "lint": "eslint src/",
-    "test": "vitest run"
+    "lint": "eslint src/"
   },
   "prettier": "@edram/prettier",
   "devDependencies": {
