@@ -19,6 +19,7 @@
   },
   "prettier": "@edram/prettier",
   "devDependencies": {
+    "@ant-design/pro-form": "^2.24.3",
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^6.1.4",
