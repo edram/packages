@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.3
+
+### Patch Changes
+
+- [`ff86223`](https://github.com/edram/packages/commit/ff86223335cd279e4e59ad0bec9678af8bea2488) Thanks [@edram](https://github.com/edram)! - 修复 width 参数没效果的 bug
+
 ## 0.0.2
 
 ### Patch Changes
