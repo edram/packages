@@ -21,6 +21,7 @@ export const ProFormSelect: Story = {
         <ProFormText name="text" label="文本"></ProFormText>
         <Component
           name="select"
+          width="lg"
           label="选择"
           options={[{ label: 'beijing', value: 'beijing' }]}
           fieldProps={{

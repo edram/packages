@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ProFormField } from '@ant-design/pro-form';
+import { createField } from '@ant-design/pro-form/es/BaseForm';
 import type { ProFormFieldItemProps } from '@ant-design/pro-form/lib/typing';
 
 import Select from '../Select';
@@ -10,7 +11,7 @@ export type ProFormSelectProps = ProFormFieldItemProps<SelectProps> & {
   options?: SelectProps['options'];
 };
 
-const ProFormSelect: React.FC<ProFormSelectProps> = (props) => {
+const BaseProFormSelect: React.FC<ProFormSelectProps> = (props) => {
   const { fieldProps, options } = props;
 
   return (
@@ -19,5 +20,9 @@ const ProFormSelect: React.FC<ProFormSelectProps> = (props) => {
     </ProFormField>
   );
 };
+
+const ProFormSelect = createField(
+  BaseProFormSelect,
+) as typeof BaseProFormSelect;
 
 export default ProFormSelect;
