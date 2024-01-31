@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.4
+
+### Patch Changes
+
+- [`c1eced7`](https://github.com/edram/packages/commit/c1eced709e9c21c1157c8ceaff9229c6ecad3b3a) Thanks [@edram](https://github.com/edram)! - 修复验证规则输出多次的 bug
+
 ## 0.0.3
 
 ### Patch Changes
