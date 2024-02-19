@@ -1,7 +1,7 @@
 import { UAParser } from 'ua-parser-js';
 
 const useUAParser = (userAgent?: string) => {
-  const parser = new UAParser(userAgent ?? global.navigator.userAgent);
+  const parser = new UAParser(userAgent ?? globalThis.navigator.userAgent);
 
   return parser;
 };
