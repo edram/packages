@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.19
+
+### Patch Changes
+
+- [`8f81f56`](https://github.com/edram/packages/commit/8f81f56a27de8d00a771672bde59dbd6f1c3b7fc) Thanks [@edram](https://github.com/edram)! - fix: 使用 globalThis 修复类型错误
+
 ## 0.0.18
 
 ### Patch Changes
