@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.18
+
+### Patch Changes
+
+- [`92a6175`](https://github.com/edram/packages/commit/92a61755b132a98a0ba46935cb4062442b4982a5) Thanks [@edram](https://github.com/edram)! - feat: 增加 useUAParser hook
+
 ## 0.0.17
 
 ### Patch Changes
