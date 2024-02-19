@@ -21,7 +21,8 @@
   "prettier": "@edram/prettier",
   "dependencies": {
     "@edram/react-utils": "workspace:^",
-    "copy-to-clipboard": "^3.3.3"
+    "copy-to-clipboard": "^3.3.3",
+    "ua-parser-js": "^1.0.37"
   },
   "devDependencies": {
     "@edram/prettier": "workspace:^",
@@ -30,6 +31,7 @@
     "@types/node": "^20.6.3",
     "@types/react": "^17.0.0",
     "@types/react-copy-to-clipboard": "^5.0.7",
+    "@types/ua-parser-js": "^0.7.39",
     "eslint": "^8.49.0",
     "eslint-config-edram": "workspace:^",
     "jsdom": "^22.1.0",
