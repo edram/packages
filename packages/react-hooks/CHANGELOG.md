@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 0.0.20
+
+### Patch Changes
+
+- [`9955f71`](https://github.com/edram/packages/commit/9955f7130bf03ec2575d72506677b3668da3ff6c) Thanks [@edram](https://github.com/edram)! - fix: 修复 globalThis.navigator undefined 的情况
+
 ## 0.0.19
 
 ### Patch Changes
