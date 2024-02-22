@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.5
+
+### Patch Changes
+
+- [`074ba3f`](https://github.com/edram/packages/commit/074ba3f05262ea9d620b6f74f5425fd4aa5dea62) Thanks [@edram](https://github.com/edram)! - feat: 增加 ProFrom 聚合组件
+
 ## 0.0.4
 
 ### Patch Changes
