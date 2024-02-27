@@ -1,0 +1,4 @@
+{
+  "extends": "@edram/tsconfig",
+  "compilerOptions": {}
+}

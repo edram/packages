@@ -1,0 +1,22 @@
+{
+  "name": "@edram/types",
+  "version": "0.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "types": "./index.d.ts",
+  "files": [
+    "index.d.ts",
+    "src"
+  ],
+  "scripts": {
+    "test": "tsd"
+  },
+  "prettier": "@edram/prettier",
+  "devDependencies": {
+    "@edram/prettier": "workspace:^",
+    "@edram/tsconfig": "workspace:^",
+    "eslint": "^8.49.0",
+    "eslint-config-edram": "workspace:^",
+    "tsd": "^0.30.5"
+  }
+}
