@@ -1,5 +1,14 @@
 # @edram/antd
 
+## 0.0.6
+
+### Patch Changes
+
+- [`e94ce7b`](https://github.com/edram/packages/commit/e94ce7b54104ee5245b2a3e747856b2e8c0c9f5f) Thanks [@edram](https://github.com/edram)! - feat: 增加 ProField 和 ProFormField 来进一步优化 ProFormSelect
+
+- Updated dependencies []:
+  - @edram/utils@0.0.2
+
 ## 0.0.5
 
 ### Patch Changes

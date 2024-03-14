@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.9
+
+### Patch Changes
+
+- [`572cef1`](https://github.com/edram/packages/commit/572cef1151c63efaac5f6d6fe113408797585861) Thanks [@edram](https://github.com/edram)! - feat: add no-unused-vars config
+
 ## 0.0.8
 
 ### Patch Changes
