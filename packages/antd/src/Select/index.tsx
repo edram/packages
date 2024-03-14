@@ -1,48 +1,55 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import type { SelectProps as AntSelectProps } from 'antd';
+import type { SelectProps as AntSelectProps, RefSelectProps } from 'antd';
 import { Select as AntSelect } from 'antd';
-import type { DefaultOptionType } from 'antd/es/select';
+import type { BaseOptionType, DefaultOptionType } from 'antd/lib/select';
 import { isArray } from '@edram/utils';
 import { useMemo, useState } from 'react';
 
-export type SelectProps = AntSelectProps & {
+export type SelectProps<
+  ValueType = any,
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
+> = AntSelectProps<ValueType, OptionType> & {
   allowCreate?: boolean;
 };
 
-const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
+const InternalSelect = <
+  ValueType = any,
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
+>(
+  props: SelectProps<ValueType, OptionType>,
+  ref: React.Ref<RefSelectProps>,
+) => {
+  const { allowCreate, ...antProps } = props;
   const showSearch = allowCreate ? true : props.showSearch;
   const [searchValue, setSearchValue] = useState<string>();
-  const [newOptions, setNewOptions] = useState<
-    NonNullable<SelectProps['options']>
-  >([]);
+  const [newOptions, setNewOptions] = useState<OptionType[]>([]);
 
   const options = useMemo(() => {
-    const options = props.options;
+    const options = antProps.options;
     if (!allowCreate) {
       return options;
     }
 
-    const result = [
-      ...(options ?? []),
-      ...newOptions,
-    ] as SelectProps['options'];
+    const result = [...(options ?? []), ...newOptions] as OptionType[];
 
     if (searchValue != '' && searchValue != null) {
       if (result?.some((it) => it.label === searchValue) === false) {
-        result.push({ label: searchValue, value: searchValue });
+        result.push({ label: searchValue, value: searchValue } as OptionType);
       }
     }
 
     return result;
-  }, [allowCreate, newOptions, props.options, searchValue]);
+  }, [allowCreate, newOptions, antProps.options, searchValue]);
 
   if (allowCreate !== true) {
     return <AntSelect {...props} />;
   }
 
   return (
-    <AntSelect
-      {...props}
+    <AntSelect<ValueType, OptionType>
+      {...antProps}
+      ref={ref}
       showSearch={showSearch}
       onChange={(value, option) => {
         if (option == undefined) {
@@ -51,7 +58,7 @@ const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
         if (option != undefined) {
           const selectOptions = isArray(option) ? option : [option];
           // 不在 props.options 里的代表是新建的
-          const newOptions: DefaultOptionType[] = [];
+          const newOptions: OptionType[] = [];
           for (const item of selectOptions) {
             if (props.options?.some((it) => it.value === item.value) !== true) {
               newOptions.push(item);
@@ -70,5 +77,19 @@ const Select: React.FC<SelectProps> = ({ allowCreate, ...props }) => {
     />
   );
 };
+
+const Select = React.forwardRef(InternalSelect) as unknown as (<
+  ValueType = any,
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
+>(
+  props: React.PropsWithChildren<SelectProps<ValueType, OptionType>> &
+    React.RefAttributes<RefSelectProps>,
+) => React.ReactElement) & {
+  displayName?: string;
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  Select.displayName = 'Select';
+}
 
 export default Select;
