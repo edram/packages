@@ -22,7 +22,7 @@ const Map = {
   form: AntProForm,
 };
 
-type ProFormProps<T, U> =
+export type ProFormProps<T, U> =
   | ({
       type: 'modal';
     } & ModalFormProps<T, U>)
