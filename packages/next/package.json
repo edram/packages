@@ -1,6 +1,6 @@
 {
   "name": "@edram/next",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "sideEffects": false,
   "main": "./lib/index.js",
@@ -18,8 +18,7 @@
     "lint": "eslint src/"
   },
   "prettier": "@edram/prettier",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
