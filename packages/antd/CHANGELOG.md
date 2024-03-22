@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.7
+
+### Patch Changes
+
+- [`479adf8`](https://github.com/edram/packages/commit/479adf8350c730443e54f3bdfb83ad13020610f7) Thanks [@edram](https://github.com/edram)! - type: 导出 ProFormProps 类型
+
 ## 0.0.6
 
 ### Patch Changes
