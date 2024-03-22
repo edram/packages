@@ -1,0 +1,31 @@
+{
+  "name": "@edram/next",
+  "version": "0.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "lib/",
+    "esm/"
+  ],
+  "scripts": {
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "tsc -p tsconfig.build.json --outDir lib --target es5",
+    "build:esm": "tsc -p tsconfig.build.json -m esNext --outDir esm",
+    "dev": "tsc -p tsconfig.build.json -m esNext --outDir esm --watch",
+    "lint": "eslint src/"
+  },
+  "prettier": "@edram/prettier",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@edram/prettier": "workspace:^",
+    "@edram/tsconfig": "workspace:^",
+    "eslint": "^8.49.0",
+    "eslint-config-edram": "workspace:^",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}
