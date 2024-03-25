@@ -1,5 +1,11 @@
 # @edram/tsconfig
 
+## 0.0.8
+
+### Patch Changes
+
+- [`91465b7`](https://github.com/edram/packages/commit/91465b7357b0899c1b32689b57f43b5d36c4ef0a) Thanks [@edram](https://github.com/edram)! - feat: 增加 esnext tsconfig 配置
+
 ## 0.0.7
 
 ### Patch Changes
