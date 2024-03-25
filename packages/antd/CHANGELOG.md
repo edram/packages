@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.8
+
+### Patch Changes
+
+- [`cda46d1`](https://github.com/edram/packages/commit/cda46d12c4863e23173cd3390b72868120681dc0) Thanks [@edram](https://github.com/edram)! - feat: 增加 next 和 antd 集成组件
+
 ## 0.0.7
 
 ### Patch Changes
