@@ -1,5 +1,11 @@
 # @edram/tsconfig
 
+## 0.0.9
+
+### Patch Changes
+
+- [`6b7fb67`](https://github.com/edram/packages/commit/6b7fb6776d6469d61b667b3a81c65e58df146630) Thanks [@edram](https://github.com/edram)! - fix: package.json files 配置增加 esnext.json
+
 ## 0.0.8
 
 ### Patch Changes
