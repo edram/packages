@@ -4,6 +4,7 @@
     // 启用 top-level await 和其他现代 ESM 功能。
     "target": "ESNext",
     "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     // 在相对路径上启用无文件扩展名的模块解析，用于诸如 npm 包导入之类的事情。
     "moduleResolution": "Bundler",
     // 允许使用原生扩展名（.ts(x)）导入 TypeScript 文件。

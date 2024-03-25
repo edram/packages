@@ -10,6 +10,7 @@
   "license": "MIT",
   "files": [
     "init.json",
-    "tsconfig.json"
+    "tsconfig.json",
+    "esnext.json"
   ]
 }
