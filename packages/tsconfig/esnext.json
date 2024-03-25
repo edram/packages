@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // 启用 top-level await 和其他现代 ESM 功能。
+    "target": "ESNext",
+    "module": "ESNext",
+    // 在相对路径上启用无文件扩展名的模块解析，用于诸如 npm 包导入之类的事情。
+    "moduleResolution": "Bundler",
+    // 允许使用原生扩展名（.ts(x)）导入 TypeScript 文件。
+    "allowImportingTsExtensions": true,
+    // 启用 JSON 导入。
+    "resolveJsonModule": true,
+    // 在需要时强制使用仅类型导入，这有助于避免捆绑问题。
+    "verbatimModuleSyntax": true,
+    // 确保每个文件都可以在不依赖其他导入的情况下进行转译。
+    "isolatedModules": true,
+    // 当使用与同一文件的另一个导入不同的大小写导入文件时报告错误。
+    "forceConsistentCasingInFileNames": true,
+    // 支持在 ESM 中导入 CJS 模块
+    "esModuleInterop": true,
+    // 跳过类型检查库和 .d.ts 文件
+    "skipLibCheck": true,
+    // 允许导入 JavaScript 文件
+    "allowJs": true,
+    // 翻译：允许在 `.js` 和 `.ts` 文件中导入 JSX 文件 。
+    "jsx": "preserve",
+    "strict": true
+  }
+}
