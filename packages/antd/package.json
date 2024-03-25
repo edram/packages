@@ -3,6 +3,18 @@
   "version": "0.0.7",
   "license": "MIT",
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./esm/index.js",
+      "require": "./lib/index.js"
+    },
+    "./next": {
+      "types": "./lib/next.d.ts",
+      "import": "./esm/next.js",
+      "require": "./lib/next.js"
+    }
+  },
   "main": "./lib/index.js",
   "module": "./esm/index.js",
   "types": "./lib/index.d.ts",
@@ -29,6 +41,7 @@
     "rc-util": "^5.4.0"
   },
   "devDependencies": {
+    "@ant-design/cssinjs": "^1.18.5",
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^6.1.4",
@@ -40,6 +53,7 @@
     "eslint": "^8.49.0",
     "eslint-config-edram": "workspace:^",
     "jsdom": "^22.1.0",
+    "next": "^14.1.4",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -47,7 +61,9 @@
     "vitest": "^0.34.4"
   },
   "peerDependencies": {
+    "@ant-design/cssinjs": "^1.18.5",
     "antd": "^5.0.0",
+    "next": "^14.1.4",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0"
   }
