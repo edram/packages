@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.9
+
+### Patch Changes
+
+- [`204e44a`](https://github.com/edram/packages/commit/204e44a8f06eb69530987cd0bd8cd94828abfc82) Thanks [@edram](https://github.com/edram)! - refactor: 锁定 pro-component 组件版本
+
 ## 0.0.8
 
 ### Patch Changes
