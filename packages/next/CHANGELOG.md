@@ -1,5 +1,11 @@
 # @edram/next
 
+## 0.0.4
+
+### Patch Changes
+
+- [`0ff1a56`](https://github.com/edram/packages/commit/0ff1a56c4aba5efeaa0a8de1d08d39498e777c95) Thanks [@edram](https://github.com/edram)! - fix: export helper
+
 ## 0.0.3
 
 ### Patch Changes
