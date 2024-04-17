@@ -1,5 +1,11 @@
 # @edram/next
 
+## 0.0.3
+
+### Patch Changes
+
+- [`094f03a`](https://github.com/edram/packages/commit/094f03a10887fbb8638ca28a9ca94299b7703a88) Thanks [@edram](https://github.com/edram)! - feat: 增加判断是否是浏览器辅助方法
+
 ## 0.0.2
 
 ### Patch Changes
