@@ -1,5 +1,11 @@
 # @edram/next
 
+## 0.0.6
+
+### Patch Changes
+
+- [`e0e57d5`](https://github.com/edram/packages/commit/e0e57d55a39db01b52ab857e9aed060a3ad90e88) Thanks [@edram](https://github.com/edram)! - feat: add useCurrentUrl hook
+
 ## 0.0.5
 
 ### Patch Changes
