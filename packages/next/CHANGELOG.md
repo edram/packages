@@ -1,5 +1,11 @@
 # @edram/next
 
+## 0.0.5
+
+### Patch Changes
+
+- [`acea19a`](https://github.com/edram/packages/commit/acea19a168dee9f5d8395c133d3df2911f79a323) Thanks [@edram](https://github.com/edram)! - feat: access url from server
+
 ## 0.0.4
 
 ### Patch Changes
