@@ -18,13 +18,16 @@
     "lint": "eslint src/"
   },
   "prettier": "@edram/prettier",
-  "dependencies": {},
   "devDependencies": {
     "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
     "eslint": "^8.49.0",
     "eslint-config-edram": "workspace:^",
+    "next": "^14",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "next": "^14"
   }
 }
