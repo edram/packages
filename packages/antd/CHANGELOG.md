@@ -1,5 +1,11 @@
 # @edram/antd
 
+## 0.0.10
+
+### Patch Changes
+
+- [`e76b3eb`](https://github.com/edram/packages/commit/e76b3ebeab8592182762620734477696ede379d0) Thanks [@edram](https://github.com/edram)! - chore: 改为 peerDependencies
+
 ## 0.0.9
 
 ### Patch Changes
