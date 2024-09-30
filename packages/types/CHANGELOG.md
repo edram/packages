@@ -1,5 +1,11 @@
 # @edram/types
 
+## 0.0.2
+
+### Patch Changes
+
+- [`d8a03c3`](https://github.com/edram/packages/commit/d8a03c3f7c8bf0f33d934640db57aaf97ab30fc2) Thanks [@edram](https://github.com/edram)! - 增加 LiteralUnion 类型
+
 ## 0.0.1
 
 ### Patch Changes
