@@ -1,5 +1,11 @@
 # eslint-config-edram
 
+## 0.0.10
+
+### Patch Changes
+
+- [`3ba683b`](https://github.com/edram/packages/commit/3ba683bc56b239666a5eed88d6b862e7fda1ef9f) Thanks [@edram](https://github.com/edram)! - feat: support typescript-eslint/parser 7.0
+
 ## 0.0.9
 
 ### Patch Changes
