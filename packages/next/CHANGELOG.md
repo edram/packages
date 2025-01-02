@@ -1,5 +1,11 @@
 # @edram/next
 
+## 0.0.7
+
+### Patch Changes
+
+- [`6a23ddb`](https://github.com/edram/packages/commit/6a23ddb787064ccc3528d9a1ab9170a8b0df7be8) Thanks [@edram](https://github.com/edram)! - fix: 修复在反向代理中 host 不正确的 bug
+
 ## 0.0.6
 
 ### Patch Changes
