@@ -3,11 +3,11 @@
   "version": "0.0.9",
   "description": "Shared TypeScript config for my projects",
   "keywords": [],
+  "license": "MIT",
   "author": {
     "name": "edram",
     "email": "edram@qq.com"
   },
-  "license": "MIT",
   "files": [
     "init.json",
     "tsconfig.json",

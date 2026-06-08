@@ -1,16 +1,16 @@
 {
   "name": "@edram/prettier",
   "version": "0.0.1",
-  "repository": "edram/packages",
   "license": "MIT",
+  "repository": "edram/packages",
+  "files": [],
   "type": "commonjs",
   "main": "index.js",
-  "files": [],
-  "prettier": "./index.js",
   "dependencies": {
     "prettier-plugin-packagejson": "^2.4.5"
   },
   "devDependencies": {
     "prettier": "^3.0.3"
-  }
+  },
+  "prettier": "./index.js"
 }

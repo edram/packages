@@ -2,34 +2,41 @@
   "name": "@edram/antd",
   "version": "0.0.10",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./esm/index.js",
-      "require": "./lib/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./next": {
-      "types": "./lib/next.d.ts",
-      "import": "./esm/next.js",
-      "require": "./lib/next.js"
+      "import": {
+        "types": "./dist/next.d.ts",
+        "default": "./dist/next.js"
+      },
+      "require": {
+        "types": "./dist/next.d.cts",
+        "default": "./dist/next.cjs"
+      }
     }
   },
-  "main": "./lib/index.js",
-  "module": "./esm/index.js",
-  "types": "./lib/index.d.ts",
-  "files": [
-    "lib/",
-    "esm/"
-  ],
   "scripts": {
-    "build": "pnpm build:cjs && pnpm build:esm",
-    "build:cjs": "tsc -p tsconfig.build.json --outDir lib --target es5",
-    "build:esm": "tsc -p tsconfig.build.json -m esNext --outDir esm",
-    "dev": "tsc -p tsconfig.build.json -m esNext --outDir esm --watch",
-    "lint": "eslint src/"
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint src"
   },
-  "prettier": "@edram/prettier",
   "dependencies": {
     "@edram/utils": "workspace:^",
     "classnames": "^2.3.2",
@@ -37,32 +44,32 @@
   },
   "devDependencies": {
     "@ant-design/cssinjs": "^1.18.5",
-    "@edram/prettier": "workspace:^",
     "@edram/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.6.3",
+    "@types/node": "^22.12.0",
     "@types/react": "^18.2.28",
-    "@vitejs/plugin-react": "^4.1.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "antd": "^5.13.2",
-    "eslint": "^8.49.0",
-    "eslint-config-edram": "workspace:^",
     "jsdom": "^22.1.0",
     "next": "^14.1.4",
-    "prettier": "^3.0.3",
+    "oxlint": "^1.68.0",
+    "oxlint-config-edram": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tsdown": "^0.22.2",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.4"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
   },
   "peerDependencies": {
     "@ant-design/cssinjs": "^1.18.5",
-    "antd": "^5.0.0",
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
     "@ant-design/pro-field": "^2.14.6",
     "@ant-design/pro-form": "^2.24.4",
     "@ant-design/pro-provider": "^2.13.5",
-    "@ant-design/pro-utils": "^2.15.4"
+    "@ant-design/pro-utils": "^2.15.4",
+    "antd": "^5.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   }
 }

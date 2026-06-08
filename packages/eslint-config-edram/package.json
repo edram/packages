@@ -1,14 +1,13 @@
 {
   "name": "eslint-config-edram",
   "version": "0.0.10",
-  "repository": "edram/packages",
   "license": "MIT",
-  "main": "index.js",
+  "repository": "edram/packages",
   "files": [
     "prettier.js",
     "rules"
   ],
-  "prettier": "@edram/prettier",
+  "main": "index.js",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0 || ^7.0.0",
     "eslint-config-prettier": "^9.0.0",
@@ -22,5 +21,6 @@
     "@edram/prettier": "workspace:^",
     "eslint": "^8.49.0",
     "prettier": "^3.0.3"
-  }
+  },
+  "prettier": "@edram/prettier"
 }

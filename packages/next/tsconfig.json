@@ -1,7 +1,7 @@
 {
   "extends": "@edram/tsconfig",
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": "./"
   },
   "include": ["./src/**/*", "./test/**/*"],
   "exclude": ["dist", "node_modules"]

@@ -18,8 +18,10 @@ import Select from '../../../../Select';
 import React from 'react';
 import { ConfigProvider } from 'antd';
 
-export interface SearchSelectProps<T = Record<string, any>>
-  extends Omit<SelectProps<KeyLabel | KeyLabel[]>, 'options'> {
+export interface SearchSelectProps<T = Record<string, any>> extends Omit<
+  SelectProps<KeyLabel | KeyLabel[]>,
+  'options'
+> {
   /** 防抖动时间 默认10 单位ms */
   debounceTime?: number;
   /** 自定义搜索方法, 返回搜索结果的 Promise */

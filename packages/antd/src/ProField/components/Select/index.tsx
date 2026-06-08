@@ -132,7 +132,7 @@ const FieldSelect: ProFieldFC<
   useImperativeHandle(
     ref,
     () => ({
-      ...(inputRef.current || {}),
+      ...inputRef.current,
       fetchData: (keyWord: string) => fetchData(keyWord),
     }),
     [fetchData],

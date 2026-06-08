@@ -4,7 +4,7 @@ const config = {
   tabWidth: 2,
   useTabs: false,
   singleQuote: true,
-  plugins: ["prettier-plugin-packagejson"]
+  plugins: ['prettier-plugin-packagejson'],
 };
 
 module.exports = config;

@@ -47,7 +47,7 @@ const BaseProFormField: React.FC<
     return dependenciesValues && restProps.request
       ? {
           ...params,
-          ...(dependenciesValues || {}),
+          ...dependenciesValues,
         }
       : params;
   }, [dependenciesValues, params, restProps.request]);

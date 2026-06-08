@@ -5,6 +5,8 @@
     "dev": "turbo dev --no-cache --continue",
     "lint": "turbo lint",
     "lint:fix": "turbo lint -- --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
     "clean": "turbo clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
@@ -13,6 +15,8 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.22.0",
+    "oxfmt": "^0.53.0",
+    "oxlint": "^1.68.0",
     "turbo": "latest"
   },
   "packageManager": "pnpm@9.4.0"
