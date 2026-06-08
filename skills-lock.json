@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "git-commit-convention": {
+      "source": "edram/skills",
+      "sourceType": "github",
+      "skillPath": "skills/git-commit-convention/SKILL.md",
+      "computedHash": "dd27827f9040b2eea5e2ae9b93967325edc209ce63d66606b423880b5879bd9c"
+    }
+  }
+}
