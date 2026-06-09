@@ -32,6 +32,7 @@ describe('useUAParser', () => {
       return useUAParser();
     });
 
-    expect(result.error).toBeUndefined();
+    // navigator 为 undefined 时不抛错，正常返回 parser 实例
+    expect(result.current).toBeDefined();
   });
 });
