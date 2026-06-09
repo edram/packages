@@ -1,8 +1,16 @@
 {
   "extends": "@edram/tsconfig",
   "compilerOptions": {
-    "rootDir": "./"
+    "rootDir": "./",
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "include": ["./src/**/*", "./test/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "./src/**/*",
+    "./test/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

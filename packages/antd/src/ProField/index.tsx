@@ -18,7 +18,7 @@ const ProFieldComponent: React.ForwardRefRenderFunction<
   {
     text,
     valueType = 'text',
-    mode = 'read',
+    mode,
     onChange,
     renderFormItem,
     value,

@@ -1,4 +1,9 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": ["./packages/oxlint-config-edram/.oxlintrc.json"]
+  "extends": ["./packages/oxlint-config-edram/.oxlintrc.json"],
+  "ignorePatterns": ["**/test-d/**"],
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  }
 }

@@ -9,7 +9,7 @@ export const useCurrentUrl = () => {
   useEffect(() => {
     let url = pathname;
     if (searchParams.size > 0) {
-      url = `${url}?${searchParams}`;
+      url = `${url}?${searchParams.toString()}`;
     }
 
     setUrl(new URL(url, globalThis.location.origin));

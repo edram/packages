@@ -1,23 +1,29 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev --no-cache --continue",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint -- --fix",
+    "build": "pnpm -r --if-present build",
+    "dev": "pnpm -r --parallel --if-present dev",
+    "lint": "oxlint packages",
+    "lint:fix": "oxlint --fix packages",
+    "test": "pnpm -r --if-present test",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "clean": "turbo clean && rm -rf node_modules",
+    "clean": "pnpm -r exec rm -rf dist && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo lint build test && changeset version && changeset publish"
+    "release": "oxlint packages && pnpm -r --if-present build && pnpm -r --if-present test && changeset version && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.22.0",
     "oxfmt": "^0.53.0",
     "oxlint": "^1.68.0",
-    "turbo": "latest"
+    "oxlint-tsgolint": "^0.23.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "18.3.3"
+    }
   },
   "packageManager": "pnpm@9.4.0"
 }

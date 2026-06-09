@@ -3,8 +3,19 @@
   "compilerOptions": {
     "rootDir": "./",
     "jsx": "react",
-    "types": ["vitest/globals", "react"]
+    "types": [
+      "vitest/globals",
+      "react"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "include": ["./src/**/*", "./test/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "./src/**/*",
+    "./test/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

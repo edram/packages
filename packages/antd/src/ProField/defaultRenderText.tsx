@@ -18,7 +18,7 @@ const defaultRenderText = (
   props: RenderProps,
   valueTypeMap: Record<string, ProRenderFieldPropsType>,
 ): React.ReactNode => {
-  const { mode = 'read', emptyText = '-' } = props;
+  const { mode, emptyText = '-' } = props;
 
   if (
     emptyText !== false &&

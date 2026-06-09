@@ -27,7 +27,7 @@ const useCopyToClipboard = (): [
       if (error instanceof Error) {
         err = error;
       } else {
-        err = new Error(`${error}`);
+        err = new Error(String(error));
       }
 
       setState({

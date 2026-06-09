@@ -2,10 +2,18 @@
   "extends": "@edram/tsconfig",
   "compilerOptions": {
     "rootDir": "./",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "types": ["vitest/globals"]
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "vitest/globals"
+    ]
   },
-  "include": ["./src/**/*", "./tests/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "./src/**/*",
+    "./tests/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

@@ -15,7 +15,7 @@ export function currentUrl(): URL {
   const { requestHeaders } = incrementalCache;
 
   const host = requestHeaders['x-forwarded-host'] ?? requestHeaders['host'];
-  const base = `${requestHeaders['x-forwarded-proto']}://${host}`;
+  const base = `${String(requestHeaders['x-forwarded-proto'])}://${String(host)}`;
 
   return new URL(urlPathname, base);
 }

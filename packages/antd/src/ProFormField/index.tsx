@@ -46,7 +46,7 @@ const BaseProFormField: React.FC<
     // 此时如果存在request，注入dependenciesValues
     return dependenciesValues && restProps.request
       ? {
-          ...params,
+          ...(params as Record<string, any>),
           ...dependenciesValues,
         }
       : params;
@@ -87,7 +87,7 @@ const BaseProFormField: React.FC<
       return <>{children}</>;
     }
     return;
-  }, [children, fieldProps?.onChange, onChange, restProps]);
+  }, [children, fieldProps, onChange, restProps]);
 
   if (childrenRender) {
     return childrenRender;

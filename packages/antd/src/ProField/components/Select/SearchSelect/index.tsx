@@ -242,7 +242,7 @@ const SearchSelect = <T,>(props: SearchSelectProps<T[]>, ref: any) => {
                   ?.toString()
                   .toLowerCase()
                   .includes(inputValue.toLowerCase()) ||
-                option?.label
+                (option?.label as string)
                   ?.toString()
                   .toLowerCase()
                   .includes(inputValue.toLowerCase()) ||
