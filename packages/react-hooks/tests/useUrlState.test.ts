@@ -1,7 +1,13 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { act, renderHook } from '@testing-library/react';
-import useUrlState from '../src/useUrlState';
+import useUrlState, {
+  parseAsArrayOf,
+  parseAsBoolean,
+  parseAsFloat,
+  parseAsInteger,
+  parseAsJson,
+} from '../src/useUrlState';
 
 describe('useUrlState', () => {
   beforeEach(() => {
@@ -190,5 +196,187 @@ describe('useUrlState', () => {
     const decoded = html.replace(/&quot;/g, '"');
     expect(decoded).toContain('{"a":"x"}');
     expect(decoded).not.toContain('"y"');
+  });
+
+  describe('parsers 数据格式化', () => {
+    it('parseAsInteger：?count=5 → state.count === 5（number）', () => {
+      window.history.replaceState(null, '', '/?count=5');
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger } }),
+      );
+
+      expect(result.current[0].count).toBe(5);
+    });
+
+    it('未声明 parser 的 key 保持字符串', () => {
+      window.history.replaceState(null, '', '/?count=5&name=bob');
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger } }),
+      );
+
+      expect(result.current[0].count).toBe(5);
+      expect(result.current[0].name).toBe('bob');
+    });
+
+    it('写回走 stringify：setState({ count: 6 }) → ?count=6', () => {
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger } }),
+      );
+
+      act(() => {
+        result.current[1]({ count: 6 });
+      });
+
+      expect(window.location.search).toBe('?count=6');
+      expect(result.current[0].count).toBe(6);
+    });
+
+    it('parseAsBoolean / parseAsFloat 读 + 写', () => {
+      window.history.replaceState(null, '', '/?active=true&ratio=1.5');
+
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: { active: parseAsBoolean, ratio: parseAsFloat },
+        }),
+      );
+
+      expect(result.current[0].active).toBe(true);
+      expect(result.current[0].ratio).toBe(1.5);
+
+      act(() => {
+        result.current[1]({ active: false, ratio: 2.25 });
+      });
+
+      expect(window.location.search).toBe('?active=false&ratio=2.25');
+    });
+
+    it('parseAsArrayOf(parseAsInteger)：?c=1&c=2 → [1,2]，写 [3,4] → ?c=3&c=4', () => {
+      window.history.replaceState(null, '', '/?c=1&c=2');
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { c: parseAsArrayOf(parseAsInteger) } }),
+      );
+
+      expect(result.current[0].c).toEqual([1, 2]);
+
+      act(() => {
+        result.current[1]({ c: [3, 4] });
+      });
+
+      expect(window.location.search).toBe('?c=3&c=4');
+      expect(result.current[0].c).toEqual([3, 4]);
+    });
+
+    it('parseAsJson：读编码 json → 对象，写回 → 编码 json', () => {
+      const encoded = encodeURIComponent(JSON.stringify({ a: 1 }));
+      window.history.replaceState(null, '', `/?filter=${encoded}`);
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { filter: parseAsJson<{ a: number }>() } }),
+      );
+
+      expect(result.current[0].filter).toEqual({ a: 1 });
+
+      act(() => {
+        result.current[1]({ filter: { a: 2 } });
+      });
+
+      expect(result.current[0].filter).toEqual({ a: 2 });
+      const sp = new URLSearchParams(window.location.search);
+      expect(JSON.parse(sp.get('filter')!)).toEqual({ a: 2 });
+    });
+
+    it('非法值 → null：?count=abc → state.count === null', () => {
+      window.history.replaceState(null, '', '/?count=abc');
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger } }),
+      );
+
+      expect(result.current[0].count).toBeNull();
+    });
+
+    it('函数简写：传函数即当作 parse，写回走默认 stringify', () => {
+      window.history.replaceState(null, '', '/?name=bob');
+
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: { name: (v: string | string[]) => String(v).toUpperCase() },
+        }),
+      );
+
+      expect(result.current[0].name).toBe('BOB');
+
+      act(() => {
+        result.current[1]({ name: 'ALICE' });
+      });
+
+      expect(window.location.search).toBe('?name=ALICE');
+    });
+
+    it('对象只写 parse：写回走默认 stringify（String 强转）', () => {
+      window.history.replaceState(null, '', '/?flag=1');
+
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: { flag: { parse: (v: string | string[]) => v === '1' } },
+        }),
+      );
+
+      expect(result.current[0].flag).toBe(true);
+
+      act(() => {
+        result.current[1]({ flag: false });
+      });
+
+      expect(window.location.search).toBe('?flag=false');
+    });
+
+    it('typed defaultSearchParams 兜底并与 url 合并', () => {
+      window.history.replaceState(null, '', '/?count=5');
+
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: { count: parseAsInteger, size: parseAsInteger },
+          defaultSearchParams: { count: 0, size: 10 },
+        }),
+      );
+
+      expect(result.current[0].count).toBe(5);
+      expect(result.current[0].size).toBe(10);
+    });
+
+    it('函数式更新基于 typed prev', () => {
+      window.history.replaceState(null, '', '/?count=5');
+
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger } }),
+      );
+
+      act(() => {
+        result.current[1]((prev) => ({
+          ...prev,
+          count: (prev.count ?? 0) + 1,
+        }));
+      });
+
+      expect(result.current[0].count).toBe(6);
+      expect(window.location.search).toBe('?count=6');
+    });
+
+    it('onChange 第一参数为 typed 值，第二参数为 querystring', () => {
+      const onChange = vi.fn();
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger }, onChange }),
+      );
+
+      act(() => {
+        result.current[1]({ count: 7 });
+      });
+
+      expect(onChange).toHaveBeenCalledWith({ count: 7 }, 'count=7');
+    });
   });
 });

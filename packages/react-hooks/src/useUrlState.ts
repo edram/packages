@@ -4,6 +4,166 @@ export type UrlSearchParams = Record<string, string | string[]>;
 
 const URL_STATE_EVENT = 'edram:urlstatechange';
 
+// ---------------------------------------------------------------------------
+// parsers：按 key 配置的值解析器
+// ---------------------------------------------------------------------------
+
+/**
+ * 单个字段的解析器。`parse` / `stringify` 均可选：
+ * - 缺 `parse` → 该 key 读取时保持 `string | string[]`；
+ * - 缺 `stringify` → 写回时走默认序列化（`String()` 强转 / 数组展开）。
+ */
+export interface Parser<T> {
+  parse?: (value: string | string[]) => T | null;
+  stringify?: (value: T) => string | string[];
+}
+
+/** 函数简写：直接传函数即被当作 `parse`。 */
+export type ParserFn<T> = (value: string | string[]) => T | null;
+
+/** `parsers[key]` 可接受的两种形态。 */
+export type ParserInput<T> = ParserFn<T> | Parser<T>;
+
+type ParserMap = Record<string, ParserInput<any>>;
+
+type NormalizedParser = {
+  parse?: ParserFn<any>;
+  stringify?: (value: any) => string | string[];
+};
+
+const normalizeParser = (input: ParserInput<any>): NormalizedParser =>
+  typeof input === 'function' ? { parse: input } : input;
+
+/** 标量 parser 容忍传入数组：取首项。 */
+const toScalar = (value: string | string[]): string =>
+  Array.isArray(value) ? (value[0] ?? '') : value;
+
+/** 字符串原样透传（数组取首项）。 */
+export const parseAsString = {
+  parse: (value: string | string[]) => toScalar(value),
+  stringify: (value: string) => value,
+} satisfies Parser<string>;
+
+/** 整数：parseInt(., 10)，NaN → null；stringify 取整。 */
+export const parseAsInteger = {
+  parse: (value: string | string[]) => {
+    const n = Number.parseInt(toScalar(value), 10);
+    return Number.isNaN(n) ? null : n;
+  },
+  stringify: (value: number) => String(Math.trunc(value)),
+} satisfies Parser<number>;
+
+/** 浮点：parseFloat，NaN → null。 */
+export const parseAsFloat = {
+  parse: (value: string | string[]) => {
+    const n = Number.parseFloat(toScalar(value));
+    return Number.isNaN(n) ? null : n;
+  },
+  stringify: (value: number) => String(value),
+} satisfies Parser<number>;
+
+/** 布尔：'true' → true，其余 → false；stringify 'true' / 'false'。 */
+export const parseAsBoolean = {
+  parse: (value: string | string[]) => toScalar(value) === 'true',
+  stringify: (value: boolean) => (value ? 'true' : 'false'),
+} satisfies Parser<boolean>;
+
+/**
+ * 数组：把 `string | string[]` 归一为数组，逐项走 `item.parse`（丢弃解析失败的 null）。
+ * stringify 产出 `string[]` → 展开为多值 `?k=a&k=b`，沿用同名 key→数组行为。
+ */
+export function parseAsArrayOf<T>(item: Parser<T>): Required<Parser<T[]>> {
+  return {
+    parse: (value) => {
+      const list = Array.isArray(value) ? value : [value];
+      const out: T[] = [];
+      for (const raw of list) {
+        const parsed = item.parse?.(raw) ?? null;
+        if (parsed !== null) {
+          out.push(parsed);
+        }
+      }
+      return out;
+    },
+    stringify: (value) =>
+      value.map((entry) => {
+        const s = item.stringify ? item.stringify(entry) : String(entry);
+        return Array.isArray(s) ? (s[0] ?? '') : s;
+      }),
+  };
+}
+
+/** 任意 JSON 结构：JSON.parse / JSON.stringify，解析失败 → null。 */
+export function parseAsJson<T = unknown>(): Required<Parser<T>> {
+  return {
+    parse: (value) => {
+      try {
+        return JSON.parse(toScalar(value)) as T;
+      } catch {
+        return null;
+      }
+    },
+    stringify: (value) => JSON.stringify(value),
+  };
+}
+
+/** 对已解析出的 raw 对象按 parsers 逐 key 应用 `parse`（仅对 url 中存在的 key）。 */
+function applyParsers(
+  raw: UrlSearchParams,
+  parsers?: ParserMap,
+): Record<string, unknown> {
+  if (!parsers) {
+    return raw;
+  }
+  const out: Record<string, unknown> = { ...raw };
+  for (const key of Object.keys(parsers)) {
+    if (!(key in raw)) {
+      continue;
+    }
+    const parser = normalizeParser(parsers[key]);
+    if (parser.parse) {
+      out[key] = parser.parse(raw[key]);
+    }
+  }
+  return out;
+}
+
+/** 把 typed state 还原为 raw（声明且有 stringify 的走 stringify，否则原样）。 */
+function serializeState(
+  state: Record<string, unknown>,
+  parsers?: ParserMap,
+): UrlSearchParams {
+  const raw: UrlSearchParams = {};
+  for (const [key, value] of Object.entries(state)) {
+    if (value == null) {
+      continue;
+    }
+    const parser =
+      parsers && key in parsers ? normalizeParser(parsers[key]) : undefined;
+    raw[key] = parser?.stringify
+      ? parser.stringify(value)
+      : (value as string | string[]);
+  }
+  return raw;
+}
+
+/** state 中各 key 的值类型：由 parse（含函数简写）决定，无 parse 的保持原样。 */
+type InferParser<P> = P extends (...args: never[]) => infer R
+  ? R | null
+  : P extends { parse: (...args: never[]) => infer R }
+    ? R | null
+    : string | string[];
+
+export type ParsedState<P extends ParserMap> = {
+  [K in keyof P]: InferParser<P[K]>;
+} & {
+  [key: string]: string | string[] | InferParser<P[keyof P]>;
+};
+
+// ---------------------------------------------------------------------------
+// 默认整串 parse / stringify + URL 外部 store
+// ---------------------------------------------------------------------------
+
 function defaultParse(search: string): UrlSearchParams {
   const params = new URLSearchParams(search);
   const result: UrlSearchParams = {};
@@ -65,13 +225,15 @@ function writeUrl(search: string, navigateMode: 'push' | 'replace'): void {
   window.dispatchEvent(new Event(URL_STATE_EVENT));
 }
 
-export interface UseUrlStateOptions {
+export interface UseUrlStateOptions<P extends ParserMap = {}> {
   /** 初始值，仅在 url 中缺失对应 key 时兜底，不会主动写回 url */
-  defaultSearchParams?: UrlSearchParams;
+  defaultSearchParams?: Partial<ParsedState<P>>;
   /** 受控值。传入则代表受控，state 直接取该值，setState 仅触发 onChange */
-  searchParams?: UrlSearchParams;
+  searchParams?: ParsedState<P>;
   /** 状态变化回调。searchParams = 新的对象值，search = 序列化后的 querystring */
-  onChange?: (searchParams: UrlSearchParams, search: string) => void;
+  onChange?: (searchParams: ParsedState<P>, search: string) => void;
+  /** 按 key 配置的值解析器；声明的 key 在 state 里为 typed 值，未声明的保持 string | string[] */
+  parsers?: P;
   /** querystring 字符串 → 状态对象，默认基于 URLSearchParams */
   parse?: (search: string) => UrlSearchParams;
   /** 状态对象 → querystring 字符串，默认基于 URLSearchParams */
@@ -80,16 +242,16 @@ export interface UseUrlStateOptions {
   navigateMode?: 'push' | 'replace';
 }
 
-type SetStateArg =
-  | UrlSearchParams
-  | ((prev: UrlSearchParams) => UrlSearchParams);
-type SetState = (next: SetStateArg) => void;
+type SetState<S> = (next: S | ((prev: S) => S)) => void;
 
-function useUrlState(options: UseUrlStateOptions = {}): [UrlSearchParams, SetState] {
+function useUrlState<P extends ParserMap = {}>(
+  options: UseUrlStateOptions<P> = {},
+): [ParsedState<P>, SetState<ParsedState<P>>] {
   const {
     defaultSearchParams,
     searchParams,
     onChange,
+    parsers,
     parse = defaultParse,
     stringify = defaultStringify,
     navigateMode = 'replace',
@@ -101,6 +263,9 @@ function useUrlState(options: UseUrlStateOptions = {}): [UrlSearchParams, SetSta
 
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
+
+  const parsersRef = useRef(parsers);
+  parsersRef.current = parsers;
 
   const parseRef = useRef(parse);
   parseRef.current = parse;
@@ -114,19 +279,26 @@ function useUrlState(options: UseUrlStateOptions = {}): [UrlSearchParams, SetSta
     getServerSnapshot,
   );
   const uncontrolledState = useMemo(
-    () => ({ ...defaultsRef.current, ...parseRef.current(search) }),
+    () =>
+      ({
+        ...defaultsRef.current,
+        ...applyParsers(parseRef.current(search), parsersRef.current),
+      }) as ParsedState<P>,
     [search],
   );
-  const state = isControlled ? searchParams : uncontrolledState;
+  const state = isControlled ? (searchParams as ParsedState<P>) : uncontrolledState;
 
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const setState = useCallback<SetState>(
+  const setState = useCallback<SetState<ParsedState<P>>>(
     (next) => {
       const value =
-        typeof next === 'function' ? next(stateRef.current) : next;
-      const nextSearch = stringifyRef.current(value);
+        typeof next === 'function'
+          ? (next as (prev: ParsedState<P>) => ParsedState<P>)(stateRef.current)
+          : next;
+      const raw = serializeState(value, parsersRef.current);
+      const nextSearch = stringifyRef.current(raw);
       if (!isControlled) {
         writeUrl(nextSearch, navigateMode);
       }
