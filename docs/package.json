@@ -29,6 +29,7 @@
     "@storybook/test": "^7.6.10",
     "@types/react": "^18.2.48",
     "storybook": "^7.6.10",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
   }
 }
