@@ -1,17 +1,17 @@
 {
   "private": true,
   "scripts": {
-    "build": "pnpm -r --if-present build",
-    "dev": "pnpm -r --parallel --if-present dev",
+    "build": "pnpm --filter './packages/*' --if-present build",
+    "dev": "pnpm --filter './packages/*' --parallel --if-present dev",
     "lint": "oxlint packages",
     "lint:fix": "oxlint --fix packages",
-    "test": "pnpm -r --if-present test",
+    "test": "pnpm --filter './packages/*' --if-present test",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "clean": "pnpm -r exec rm -rf dist && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "oxlint packages && pnpm -r --if-present build && pnpm -r --if-present test && changeset version && changeset publish"
+    "release": "oxlint packages && pnpm --filter './packages/*' --if-present build && pnpm --filter './packages/*' --if-present test && changeset version && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
