@@ -1,6 +1,6 @@
 import copy from 'copy-to-clipboard';
-import type { RenderHookResult } from '@testing-library/react-hooks';
-import { act, renderHook } from '@testing-library/react-hooks';
+import type { RenderHookResult } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { useCopyToClipboard } from '../src';
 
 vi.mock('copy-to-clipboard', () => {
@@ -10,7 +10,7 @@ vi.mock('copy-to-clipboard', () => {
 });
 
 describe('useCopyToClipboard', () => {
-  let hook: RenderHookResult<unknown, ReturnType<typeof useCopyToClipboard>>;
+  let hook: RenderHookResult<ReturnType<typeof useCopyToClipboard>, unknown>;
   beforeEach(() => {
     hook = renderHook(() => useCopyToClipboard());
   });

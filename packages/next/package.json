@@ -34,6 +34,7 @@
     "oxlint": "^1.68.0",
     "oxlint-config-edram": "workspace:^",
     "react": "^18",
+    "react-dom": "^18",
     "tsdown": "^0.22.2",
     "typescript": "^5.2.2"
   },

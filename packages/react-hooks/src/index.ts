@@ -5,3 +5,6 @@ export { default as useCopyToClipboard } from './useCopyToClipboard';
 
 export { default as useUAParser } from './useUAParser';
 export * from './useUAParser';
+
+export { default as useUrlState } from './useUrlState';
+export * from './useUrlState';
