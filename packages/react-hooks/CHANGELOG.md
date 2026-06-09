@@ -1,5 +1,11 @@
 # @edram/react-hooks
 
+## 1.1.0
+
+### Minor Changes
+
+- [`f1ff8b3`](https://github.com/edram/packages/commit/f1ff8b3ae62958ec7157656a67a3129ac9e5204a) Thanks [@edram](https://github.com/edram)! - useUrlState 新增 per-key `parsers`：按 key 把 querystring 解析成 typed 值（写回 url 自动反序列化），未声明的 key 保持 `string | string[]`。`parsers[key]` 可传函数（当作 `parse`）或 `{ parse?, stringify? }` 对象（两者均可选）。同时导出内置解析器 `parseAsString` / `parseAsInteger` / `parseAsFloat` / `parseAsBoolean` / `parseAsArrayOf` / `parseAsJson` 及 `Parser` / `ParserInput` 类型。
+
 ## 1.0.0
 
 ### Major Changes
