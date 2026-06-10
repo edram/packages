@@ -4,6 +4,7 @@
     "rootDir": "./",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "noUncheckedIndexedAccess": true,
     "types": [
       "vitest/globals"
     ]

@@ -116,13 +116,14 @@ function applyParsers(
     return raw;
   }
   const out: Record<string, unknown> = { ...raw };
-  for (const key of Object.keys(parsers)) {
-    if (!(key in raw)) {
+  for (const [key, input] of Object.entries(parsers)) {
+    const value = raw[key];
+    if (value === undefined) {
       continue;
     }
-    const parser = normalizeParser(parsers[key]);
+    const parser = normalizeParser(input);
     if (parser.parse) {
-      out[key] = parser.parse(raw[key]);
+      out[key] = parser.parse(value);
     }
   }
   return out;
@@ -138,8 +139,8 @@ function serializeState(
     if (value == null) {
       continue;
     }
-    const parser =
-      parsers && key in parsers ? normalizeParser(parsers[key]) : undefined;
+    const input = parsers?.[key];
+    const parser = input === undefined ? undefined : normalizeParser(input);
     raw[key] = parser?.stringify
       ? parser.stringify(value)
       : (value as string | string[]);
@@ -154,8 +155,16 @@ type InferParser<P> = P extends (...args: never[]) => infer R
     ? R | null
     : string | string[];
 
+/** 读取侧 state：声明 parser 的 key 为 typed 值（解析失败 → null，url 缺失 → undefined），未声明的 key 保持 string | string[]（属性访问时声明 key 优先于索引签名）。 */
 export type ParsedState<P extends ParserMap> = {
-  [K in keyof P]: InferParser<P[K]>;
+  [K in keyof P]: InferParser<P[K]> | undefined;
+} & {
+  [key: string]: string | string[];
+};
+
+/** 输入侧（defaultSearchParams / searchParams / setState）：索引签名需并入所有 parser 的返回类型，否则对象字面量里的 typed 值过不了索引签名检查。 */
+type StateInput<P extends ParserMap> = {
+  [K in keyof P]: InferParser<P[K]> | undefined;
 } & {
   [key: string]: string | string[] | InferParser<P[keyof P]>;
 };
@@ -172,7 +181,7 @@ function defaultParse(search: string): UrlSearchParams {
       continue;
     }
     const all = params.getAll(key);
-    result[key] = all.length > 1 ? all : all[0];
+    result[key] = all.length > 1 ? all : (all[0] ?? '');
   }
   return result;
 }
@@ -227,9 +236,9 @@ function writeUrl(search: string, navigateMode: 'push' | 'replace'): void {
 
 export interface UseUrlStateOptions<P extends ParserMap = {}> {
   /** 初始值，仅在 url 中缺失对应 key 时兜底，不会主动写回 url */
-  defaultSearchParams?: Partial<ParsedState<P>>;
+  defaultSearchParams?: Partial<StateInput<P>>;
   /** 受控值。传入则代表受控，state 直接取该值，setState 仅触发 onChange */
-  searchParams?: ParsedState<P>;
+  searchParams?: StateInput<P>;
   /** 状态变化回调。searchParams = 新的对象值，search = 序列化后的 querystring */
   onChange?: (searchParams: ParsedState<P>, search: string) => void;
   /** 按 key 配置的值解析器；声明的 key 在 state 里为 typed 值，未声明的保持 string | string[] */
@@ -242,11 +251,16 @@ export interface UseUrlStateOptions<P extends ParserMap = {}> {
   navigateMode?: 'push' | 'replace';
 }
 
-type SetState<S> = (next: S | ((prev: S) => S)) => void;
+/** setState 入参允许 null / undefined 值，表示删除该 key（序列化时跳过）。 */
+type NullableState<S> = { [K in keyof S]: S[K] | null | undefined };
+
+type SetState<S, Input = S> = (
+  next: NullableState<Input> | ((prev: S) => NullableState<Input>),
+) => void;
 
 function useUrlState<P extends ParserMap = {}>(
   options: UseUrlStateOptions<P> = {},
-): [ParsedState<P>, SetState<ParsedState<P>>] {
+): [ParsedState<P>, SetState<ParsedState<P>, StateInput<P>>] {
   const {
     defaultSearchParams,
     searchParams,
@@ -291,18 +305,22 @@ function useUrlState<P extends ParserMap = {}>(
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const setState = useCallback<SetState<ParsedState<P>>>(
+  const setState = useCallback<SetState<ParsedState<P>, StateInput<P>>>(
     (next) => {
       const value =
         typeof next === 'function'
-          ? (next as (prev: ParsedState<P>) => ParsedState<P>)(stateRef.current)
+          ? (
+              next as (
+                prev: ParsedState<P>,
+              ) => NullableState<StateInput<P>>
+            )(stateRef.current)
           : next;
       const raw = serializeState(value, parsersRef.current);
       const nextSearch = stringifyRef.current(raw);
       if (!isControlled) {
         writeUrl(nextSearch, navigateMode);
       }
-      onChangeRef.current?.(value, nextSearch);
+      onChangeRef.current?.(value as ParsedState<P>, nextSearch);
     },
     [isControlled, navigateMode],
   );

@@ -89,6 +89,19 @@ describe('useUrlState', () => {
     expect(window.location.search).toBe('?a=a&b=2');
   });
 
+  it('值为 null 的 key 从 url 中移除', () => {
+    window.history.replaceState(null, '', '/?a=1&b=2');
+
+    const { result } = renderHook(() => useUrlState());
+
+    act(() => {
+      result.current[1]({ a: null, b: '2' });
+    });
+
+    expect(window.location.search).toBe('?b=2');
+    expect(result.current[0]).toEqual({ b: '2' });
+  });
+
   it('defaultSearchParams 在 url 为空时兜底，且不主动写入 url', () => {
     const { result } = renderHook(() =>
       useUrlState({ defaultSearchParams: { a: 'x' } }),
