@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 
 export type UrlSearchParams = Record<string, string | string[]>;
 
@@ -299,10 +306,34 @@ function writeUrl(search: string, navigateMode: 'push' | 'replace'): void {
   window.dispatchEvent(new Event(URL_STATE_EVENT));
 }
 
+/** defaultSearchParams 归一为与 location.search 同形态的字符串（非空时带前导 '?'）。 */
+function toSearchString(
+  input: string | URLSearchParams | Record<string, unknown>,
+  parsers: ParserMap | undefined,
+  stringify: (state: UrlSearchParams) => string,
+): string {
+  let search: string;
+  if (typeof input === 'string') {
+    search = input;
+  } else if (input instanceof URLSearchParams) {
+    search = input.toString();
+  } else {
+    search = stringify(serializeState(input, parsers));
+  }
+  return search === '' || search.startsWith('?') ? search : `?${search}`;
+}
+
 export interface UseUrlStateOptions<
   P extends ParserMap = {},
   D extends Partial<StateInput<P>> = {},
 > {
+  /**
+   * 初始 querystring，仅首次渲染生效，挂载后以真实 url 为准。
+   * 用于挂载时 window.location 尚未更新的场景（如 Next.js App Router
+   * 客户端导航中渲染新页面），可直接传 next/navigation 的 useSearchParams()。
+   * 支持 'a=1&b=2' 字符串、URLSearchParams 或与 setState 入参同构的对象。
+   */
+  defaultSearchParams?: string | URLSearchParams | Partial<StateInput<P>>;
   /** 默认值，仅在 url 中缺失对应 key 时兜底，不会主动写回 url；提供的 key 会反映在 state 类型上（去掉 undefined） */
   defaultValue?: D;
   /** 受控值。传入则代表受控，state 直接取该值，setState 仅触发 onChange */
@@ -335,6 +366,7 @@ function useUrlState<
   options: UseUrlStateOptions<P, D> = {},
 ): [ParsedState<P, D>, SetState<ParsedState<P, D>, StateInput<P>>] {
   const {
+    defaultSearchParams,
     defaultValue,
     searchParams,
     onChange,
@@ -345,6 +377,18 @@ function useUrlState<
     navigateMode = 'replace',
   } = options;
   const isControlled = searchParams !== undefined;
+
+  // defaultSearchParams 仅首次渲染生效：第一次 render 捕获一份，挂载后弃用
+  const initializedRef = useRef(false);
+  const initialSearchRef = useRef<string | null>(null);
+  if (!initializedRef.current) {
+    initializedRef.current = true;
+    initialSearchRef.current =
+      defaultSearchParams === undefined
+        ? null
+        : toSearchString(defaultSearchParams, parsers, stringify);
+  }
+  const mountedRef = useRef(false);
 
   const defaultsRef = useRef(defaultValue);
   defaultsRef.current = defaultValue;
@@ -361,11 +405,31 @@ function useUrlState<
   const stringifyRef = useRef(stringify);
   stringifyRef.current = stringify;
 
-  const search = useSyncExternalStore(
+  const storeSearch = useSyncExternalStore(
     subscribe,
     getClientSnapshot,
     getServerSnapshot,
   );
+  const search =
+    !mountedRef.current && initialSearchRef.current !== null
+      ? initialSearchRef.current
+      : storeSearch;
+
+  const [, forceUpdate] = useReducer((count: number) => count + 1, 0);
+  useEffect(() => {
+    if (mountedRef.current) {
+      return;
+    }
+    mountedRef.current = true;
+    // 切回真实 url：与首次渲染用的 defaultSearchParams 不一致时才需要重渲染
+    if (
+      initialSearchRef.current !== null &&
+      initialSearchRef.current !== getClientSnapshot()
+    ) {
+      forceUpdate();
+    }
+  }, []);
+
   const uncontrolledState = useMemo(
     () =>
       ({

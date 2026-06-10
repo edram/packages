@@ -1,4 +1,4 @@
-import { createElement } from 'react';
+import { createElement, Fragment, useInsertionEffect } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { act, renderHook } from '@testing-library/react';
 import useUrlState, {
@@ -461,6 +461,96 @@ describe('useUrlState', () => {
       );
 
       expect(result.current[0].count).toBe(5);
+    });
+  });
+
+  describe('defaultSearchParams（仅首次渲染生效）', () => {
+    it('字符串：首次渲染读 defaultSearchParams，挂载后以真实 url 为准', () => {
+      window.history.replaceState(null, '', '/?a=real');
+
+      const states: unknown[] = [];
+      const { result } = renderHook(() => {
+        const ret = useUrlState({ defaultSearchParams: 'a=initial' });
+        states.push(ret[0]);
+        return ret;
+      });
+
+      expect(states[0]).toEqual({ a: 'initial' });
+      expect(result.current[0]).toEqual({ a: 'real' });
+    });
+
+    it('支持 URLSearchParams 入参', () => {
+      const states: unknown[] = [];
+      renderHook(() => {
+        const ret = useUrlState({
+          defaultSearchParams: new URLSearchParams('b=2'),
+        });
+        states.push(ret[0]);
+        return ret;
+      });
+
+      expect(states[0]).toEqual({ b: '2' });
+    });
+
+    it('支持对象入参，typed 值经 parsers 序列化再解析', () => {
+      const states: Array<Record<string, unknown>> = [];
+      renderHook(() => {
+        const ret = useUrlState({
+          parsers: { count: parseAsInteger },
+          defaultSearchParams: { count: 3 },
+        });
+        states.push(ret[0]);
+        return ret;
+      });
+
+      expect(states[0]?.count).toBe(3);
+    });
+
+    it('与真实 url 一致时挂载后 state 不变', () => {
+      window.history.replaceState(null, '', '/?a=1');
+
+      const { result } = renderHook(() =>
+        useUrlState({ defaultSearchParams: 'a=1' }),
+      );
+
+      expect(result.current[0]).toEqual({ a: '1' });
+    });
+
+    it('Next.js App Router 导航时序：渲染期 location 还是旧路由，state 不读旧 querystring', () => {
+      // 旧页面：/sample?search=aaa；Next 在新页面 render 完成后才于
+      // useInsertionEffect 中 pushState 新 url
+      window.history.replaceState(null, '', '/sample?search=aaa');
+
+      function HistoryUpdater() {
+        useInsertionEffect(() => {
+          window.history.pushState(null, '', '/japan');
+        }, []);
+        return null;
+      }
+
+      const states: unknown[] = [];
+      const { result } = renderHook(
+        () => {
+          const ret = useUrlState({ defaultSearchParams: '' });
+          states.push(ret[0]);
+          return ret;
+        },
+        {
+          wrapper: ({ children }) =>
+            createElement(
+              Fragment,
+              null,
+              children,
+              createElement(HistoryUpdater),
+            ),
+        },
+      );
+
+      // 首次渲染没有读到旧路由残留的 search
+      expect(states[0]).toEqual({});
+      // 挂载后 url 已切到新路由，state 保持干净
+      expect(window.location.pathname).toBe('/japan');
+      expect(result.current[0]).toEqual({});
     });
   });
 });

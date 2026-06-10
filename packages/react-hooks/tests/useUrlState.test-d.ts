@@ -50,6 +50,19 @@ describe('useUrlState 类型', () => {
     expectTypeOf(state.a).toEqualTypeOf<number>();
   });
 
+  it('defaultSearchParams 接受字符串 / URLSearchParams / 与 setState 同构的对象', () => {
+    renderHook(() => useUrlState({ defaultSearchParams: 'a=1' }));
+    renderHook(() =>
+      useUrlState({ defaultSearchParams: new URLSearchParams('a=1') }),
+    );
+    renderHook(() =>
+      useUrlState({
+        parsers: { count: parseAsInteger },
+        defaultSearchParams: { count: 3 },
+      }),
+    );
+  });
+
   it('parsers + defaultValue 选项：去掉 undefined，保留 null（解析失败）', () => {
     const { result } = renderHook(() =>
       useUrlState({
