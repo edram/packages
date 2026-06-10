@@ -1,5 +1,19 @@
 # @edram/react-hooks
 
+## 2.0.0
+
+### Major Changes
+
+- [`451ff19`](https://github.com/edram/packages/commit/451ff1966bbf86d4d95cc2700391f538c7397dba) Thanks [@edram](https://github.com/edram)! - feat(useUrlState): defaultValue / clearOnDefault / parser.withDefault
+
+  - **BREAKING**：`defaultSearchParams` 重命名为 `defaultValue`，并带类型推导——提供默认值的 key 在 state 类型里去掉 `undefined`（无 parser 的 key 为 `string | string[]`，有 parser 的为 `T | null`）
+  - 新增 `clearOnDefault`（默认 `true`，**行为变化**）：写回时值等于默认值的 key 不写入 url，读取时由默认值兜底
+  - 内置 parser 新增 `withDefault(value)`：url 缺失或解析失败都回退默认值，state 类型收窄为精确的 `T`；同一 key 上 `defaultValue` 选项优先级高于 `parser.withDefault`
+
+### Patch Changes
+
+- [`11cac91`](https://github.com/edram/packages/commit/11cac91e22ae33b5d32baee6db0550e57d6e9f58) Thanks [@edram](https://github.com/edram)! - fix(useUrlState): 类型对齐运行时行为——setState 入参允许 null / undefined 值（删除 key）；声明 parser 的 key 如实为 `T | null | undefined`（解析失败 → null，url 缺失 → undefined）；未声明 key 不再被 parsers 影响，保持 `string | string[]`
+
 ## 1.1.0
 
 ### Minor Changes
