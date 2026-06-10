@@ -25,4 +25,41 @@ describe('useUrlState 类型', () => {
 
     expectTypeOf(state.b).toEqualTypeOf<string | string[] | undefined>();
   });
+
+  it('defaultValue 提供的 key 去掉 undefined（必有），未提供的不受影响', () => {
+    const { result } = renderHook(() =>
+      useUrlState({ defaultValue: { a: 'x' } }),
+    );
+
+    const [state] = result.current;
+
+    expectTypeOf(state.a).toEqualTypeOf<string | string[]>();
+
+    expectTypeOf(state.b).toEqualTypeOf<string | string[] | undefined>();
+  });
+
+  it('parser.withDefault：key 收窄为 T（无 null / undefined）', () => {
+    const { result } = renderHook(() =>
+      useUrlState({
+        parsers: { a: parseAsInteger.withDefault(1) },
+      }),
+    );
+
+    const [state] = result.current;
+
+    expectTypeOf(state.a).toEqualTypeOf<number>();
+  });
+
+  it('parsers + defaultValue 选项：去掉 undefined，保留 null（解析失败）', () => {
+    const { result } = renderHook(() =>
+      useUrlState({
+        parsers: { a: parseAsInteger },
+        defaultValue: { a: 0 },
+      }),
+    );
+
+    const [state] = result.current;
+
+    expectTypeOf(state.a).toEqualTypeOf<number | null>();
+  });
 });

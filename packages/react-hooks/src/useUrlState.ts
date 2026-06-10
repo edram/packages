@@ -26,9 +26,28 @@ export type ParserInput<T> = ParserFn<T> | Parser<T>;
 
 type ParserMap = Record<string, ParserInput<any>>;
 
+/** 带默认值的 parser：url 缺失或解析失败（null）时回退 defaultValue，state 类型收窄为 T。 */
+export interface ParserWithDefault<T> extends Parser<T> {
+  defaultValue: T;
+}
+
+/** 内置 parser 形态：完整 parse / stringify，外加 withDefault。 */
+export interface ParserBuilder<T> extends Required<Parser<T>> {
+  /** 附加默认值：url 缺失或解析失败时回退 defaultValue，state 类型收窄为 T。 */
+  withDefault: (defaultValue: T) => ParserWithDefault<T>;
+}
+
+function createParser<T>(parser: Required<Parser<T>>): ParserBuilder<T> {
+  return {
+    ...parser,
+    withDefault: (defaultValue) => ({ ...parser, defaultValue }),
+  };
+}
+
 type NormalizedParser = {
   parse?: ParserFn<any>;
   stringify?: (value: any) => string | string[];
+  defaultValue?: unknown;
 };
 
 const normalizeParser = (input: ParserInput<any>): NormalizedParser =>
@@ -39,41 +58,41 @@ const toScalar = (value: string | string[]): string =>
   Array.isArray(value) ? (value[0] ?? '') : value;
 
 /** 字符串原样透传（数组取首项）。 */
-export const parseAsString = {
-  parse: (value: string | string[]) => toScalar(value),
-  stringify: (value: string) => value,
-} satisfies Parser<string>;
+export const parseAsString = createParser<string>({
+  parse: (value) => toScalar(value),
+  stringify: (value) => value,
+});
 
 /** 整数：parseInt(., 10)，NaN → null；stringify 取整。 */
-export const parseAsInteger = {
-  parse: (value: string | string[]) => {
+export const parseAsInteger = createParser<number>({
+  parse: (value) => {
     const n = Number.parseInt(toScalar(value), 10);
     return Number.isNaN(n) ? null : n;
   },
-  stringify: (value: number) => String(Math.trunc(value)),
-} satisfies Parser<number>;
+  stringify: (value) => String(Math.trunc(value)),
+});
 
 /** 浮点：parseFloat，NaN → null。 */
-export const parseAsFloat = {
-  parse: (value: string | string[]) => {
+export const parseAsFloat = createParser<number>({
+  parse: (value) => {
     const n = Number.parseFloat(toScalar(value));
     return Number.isNaN(n) ? null : n;
   },
-  stringify: (value: number) => String(value),
-} satisfies Parser<number>;
+  stringify: (value) => String(value),
+});
 
 /** 布尔：'true' → true，其余 → false；stringify 'true' / 'false'。 */
-export const parseAsBoolean = {
-  parse: (value: string | string[]) => toScalar(value) === 'true',
-  stringify: (value: boolean) => (value ? 'true' : 'false'),
-} satisfies Parser<boolean>;
+export const parseAsBoolean = createParser<boolean>({
+  parse: (value) => toScalar(value) === 'true',
+  stringify: (value) => (value ? 'true' : 'false'),
+});
 
 /**
  * 数组：把 `string | string[]` 归一为数组，逐项走 `item.parse`（丢弃解析失败的 null）。
  * stringify 产出 `string[]` → 展开为多值 `?k=a&k=b`，沿用同名 key→数组行为。
  */
-export function parseAsArrayOf<T>(item: Parser<T>): Required<Parser<T[]>> {
-  return {
+export function parseAsArrayOf<T>(item: Parser<T>): ParserBuilder<T[]> {
+  return createParser({
     parse: (value) => {
       const list = Array.isArray(value) ? value : [value];
       const out: T[] = [];
@@ -90,12 +109,12 @@ export function parseAsArrayOf<T>(item: Parser<T>): Required<Parser<T[]>> {
         const s = item.stringify ? item.stringify(entry) : String(entry);
         return Array.isArray(s) ? (s[0] ?? '') : s;
       }),
-  };
+  });
 }
 
 /** 任意 JSON 结构：JSON.parse / JSON.stringify，解析失败 → null。 */
-export function parseAsJson<T = unknown>(): Required<Parser<T>> {
-  return {
+export function parseAsJson<T = unknown>(): ParserBuilder<T> {
+  return createParser({
     parse: (value) => {
       try {
         return JSON.parse(toScalar(value)) as T;
@@ -104,7 +123,7 @@ export function parseAsJson<T = unknown>(): Required<Parser<T>> {
       }
     },
     stringify: (value) => JSON.stringify(value),
-  };
+  });
 }
 
 /** 对已解析出的 raw 对象按 parsers 逐 key 应用 `parse`（仅对 url 中存在的 key）。 */
@@ -123,10 +142,39 @@ function applyParsers(
     }
     const parser = normalizeParser(input);
     if (parser.parse) {
-      out[key] = parser.parse(value);
+      const parsed = parser.parse(value);
+      out[key] =
+        parsed === null && parser.defaultValue !== undefined
+          ? parser.defaultValue
+          : parsed;
     }
   }
   return out;
+}
+
+/** 汇总默认值：parser.withDefault 在前，defaultValue 选项优先级更高。 */
+function collectDefaults(
+  defaults?: Record<string, unknown>,
+  parsers?: ParserMap,
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  if (parsers) {
+    for (const [key, input] of Object.entries(parsers)) {
+      const parser = normalizeParser(input);
+      if (parser.defaultValue !== undefined) {
+        out[key] = parser.defaultValue;
+      }
+    }
+  }
+  return { ...out, ...defaults };
+}
+
+/** raw 值相等：标量 ===，数组逐项比较。 */
+function isSameRaw(a: string | string[], b: string | string[]): boolean {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((item, i) => item === b[i]);
+  }
+  return a === b;
 }
 
 /** 把 typed state 还原为 raw（声明且有 stringify 的走 stringify，否则原样）。 */
@@ -148,21 +196,38 @@ function serializeState(
   return raw;
 }
 
-/** state 中各 key 的值类型：由 parse（含函数简写）决定，无 parse 的保持原样。 */
-type InferParser<P> = P extends (...args: never[]) => infer R
-  ? R | null
-  : P extends { parse: (...args: never[]) => infer R }
+/** state 中各 key 的值类型：withDefault 收窄为 T；否则由 parse（含函数简写）决定（解析失败 → null），无 parse 的保持原样。 */
+type InferParser<P> = P extends { defaultValue: infer T }
+  ? T
+  : P extends (...args: never[]) => infer R
     ? R | null
-    : string | string[];
+    : P extends { parse: (...args: never[]) => infer R }
+      ? R | null
+      : string | string[];
 
-/** 读取侧 state：声明 parser 的 key 为 typed 值（解析失败 → null，url 缺失 → undefined），未声明的 key 保持 string | string[]（属性访问时声明 key 优先于索引签名）。 */
-export type ParsedState<P extends ParserMap> = {
-  [K in keyof P]: InferParser<P[K]> | undefined;
+/**
+ * 读取侧 state（属性访问时声明 key 优先于索引签名）：
+ * - 声明 parser 的 key 为 typed 值；url 缺失 → undefined，但有默认值
+ *   （parser.withDefault 或 defaultValue 选项）兜底时去掉 undefined；
+ * - 只出现在 defaultValue 选项里的 key 为 string | string[]（必有）；
+ * - 其余 key 保持 string | string[]。
+ */
+export type ParsedState<
+  P extends ParserMap = {},
+  D extends Record<string, unknown> = {},
+> = {
+  [K in keyof P]: P[K] extends { defaultValue: any }
+    ? InferParser<P[K]>
+    : K extends keyof D
+      ? InferParser<P[K]>
+      : InferParser<P[K]> | undefined;
+} & {
+  [K in Exclude<keyof D, keyof P>]: string | string[];
 } & {
   [key: string]: string | string[];
 };
 
-/** 输入侧（defaultSearchParams / searchParams / setState）：索引签名需并入所有 parser 的返回类型，否则对象字面量里的 typed 值过不了索引签名检查。 */
+/** 输入侧（defaultValue / searchParams / setState）：索引签名需并入所有 parser 的返回类型，否则对象字面量里的 typed 值过不了索引签名检查。 */
 type StateInput<P extends ParserMap> = {
   [K in keyof P]: InferParser<P[K]> | undefined;
 } & {
@@ -234,15 +299,20 @@ function writeUrl(search: string, navigateMode: 'push' | 'replace'): void {
   window.dispatchEvent(new Event(URL_STATE_EVENT));
 }
 
-export interface UseUrlStateOptions<P extends ParserMap = {}> {
-  /** 初始值，仅在 url 中缺失对应 key 时兜底，不会主动写回 url */
-  defaultSearchParams?: Partial<StateInput<P>>;
+export interface UseUrlStateOptions<
+  P extends ParserMap = {},
+  D extends Partial<StateInput<P>> = {},
+> {
+  /** 默认值，仅在 url 中缺失对应 key 时兜底，不会主动写回 url；提供的 key 会反映在 state 类型上（去掉 undefined） */
+  defaultValue?: D;
   /** 受控值。传入则代表受控，state 直接取该值，setState 仅触发 onChange */
   searchParams?: StateInput<P>;
   /** 状态变化回调。searchParams = 新的对象值，search = 序列化后的 querystring */
-  onChange?: (searchParams: ParsedState<P>, search: string) => void;
+  onChange?: (searchParams: ParsedState<P, D>, search: string) => void;
   /** 按 key 配置的值解析器；声明的 key 在 state 里为 typed 值，未声明的保持 string | string[] */
   parsers?: P;
+  /** 写回时值等于默认值（defaultValue 选项或 parser.withDefault）的 key 不写入 url，默认 true */
+  clearOnDefault?: boolean;
   /** querystring 字符串 → 状态对象，默认基于 URLSearchParams */
   parse?: (search: string) => UrlSearchParams;
   /** 状态对象 → querystring 字符串，默认基于 URLSearchParams */
@@ -258,22 +328,26 @@ type SetState<S, Input = S> = (
   next: NullableState<Input> | ((prev: S) => NullableState<Input>),
 ) => void;
 
-function useUrlState<P extends ParserMap = {}>(
-  options: UseUrlStateOptions<P> = {},
-): [ParsedState<P>, SetState<ParsedState<P>, StateInput<P>>] {
+function useUrlState<
+  P extends ParserMap = {},
+  D extends Partial<StateInput<P>> = {},
+>(
+  options: UseUrlStateOptions<P, D> = {},
+): [ParsedState<P, D>, SetState<ParsedState<P, D>, StateInput<P>>] {
   const {
-    defaultSearchParams,
+    defaultValue,
     searchParams,
     onChange,
     parsers,
+    clearOnDefault = true,
     parse = defaultParse,
     stringify = defaultStringify,
     navigateMode = 'replace',
   } = options;
   const isControlled = searchParams !== undefined;
 
-  const defaultsRef = useRef(defaultSearchParams);
-  defaultsRef.current = defaultSearchParams;
+  const defaultsRef = useRef(defaultValue);
+  defaultsRef.current = defaultValue;
 
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
@@ -295,34 +369,48 @@ function useUrlState<P extends ParserMap = {}>(
   const uncontrolledState = useMemo(
     () =>
       ({
-        ...defaultsRef.current,
+        ...collectDefaults(defaultsRef.current, parsersRef.current),
         ...applyParsers(parseRef.current(search), parsersRef.current),
-      }) as ParsedState<P>,
+      }) as ParsedState<P, D>,
     [search],
   );
-  const state = isControlled ? (searchParams as ParsedState<P>) : uncontrolledState;
+  const state = isControlled
+    ? (searchParams as ParsedState<P, D>)
+    : uncontrolledState;
 
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const setState = useCallback<SetState<ParsedState<P>, StateInput<P>>>(
+  const setState = useCallback<SetState<ParsedState<P, D>, StateInput<P>>>(
     (next) => {
       const value =
         typeof next === 'function'
           ? (
               next as (
-                prev: ParsedState<P>,
+                prev: ParsedState<P, D>,
               ) => NullableState<StateInput<P>>
             )(stateRef.current)
           : next;
       const raw = serializeState(value, parsersRef.current);
+      if (clearOnDefault) {
+        const defaultsRaw = serializeState(
+          collectDefaults(defaultsRef.current, parsersRef.current),
+          parsersRef.current,
+        );
+        for (const [key, def] of Object.entries(defaultsRaw)) {
+          const current = raw[key];
+          if (current !== undefined && isSameRaw(current, def)) {
+            delete raw[key];
+          }
+        }
+      }
       const nextSearch = stringifyRef.current(raw);
       if (!isControlled) {
         writeUrl(nextSearch, navigateMode);
       }
-      onChangeRef.current?.(value as ParsedState<P>, nextSearch);
+      onChangeRef.current?.(value as ParsedState<P, D>, nextSearch);
     },
-    [isControlled, navigateMode],
+    [isControlled, navigateMode, clearOnDefault],
   );
 
   return [state, setState];

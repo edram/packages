@@ -102,20 +102,20 @@ describe('useUrlState', () => {
     expect(result.current[0]).toEqual({ b: '2' });
   });
 
-  it('defaultSearchParams 在 url 为空时兜底，且不主动写入 url', () => {
+  it('defaultValue 在 url 为空时兜底，且不主动写入 url', () => {
     const { result } = renderHook(() =>
-      useUrlState({ defaultSearchParams: { a: 'x' } }),
+      useUrlState({ defaultValue: { a: 'x' } }),
     );
 
     expect(result.current[0]).toEqual({ a: 'x' });
     expect(window.location.search).toBe('');
   });
 
-  it('url 有值时覆盖 defaultSearchParams，缺失项用默认补齐', () => {
+  it('url 有值时覆盖 defaultValue，缺失项用默认补齐', () => {
     window.history.replaceState(null, '', '/?a=y');
 
     const { result } = renderHook(() =>
-      useUrlState({ defaultSearchParams: { a: 'x', z: 'z' } }),
+      useUrlState({ defaultValue: { a: 'x', z: 'z' } }),
     );
 
     expect(result.current[0]).toEqual({ a: 'y', z: 'z' });
@@ -200,7 +200,7 @@ describe('useUrlState', () => {
     window.history.replaceState(null, '', '/?a=y');
 
     function Comp() {
-      const [state] = useUrlState({ defaultSearchParams: { a: 'x' } });
+      const [state] = useUrlState({ defaultValue: { a: 'x' } });
       return createElement('div', null, JSON.stringify(state));
     }
 
@@ -347,13 +347,13 @@ describe('useUrlState', () => {
       expect(window.location.search).toBe('?flag=false');
     });
 
-    it('typed defaultSearchParams 兜底并与 url 合并', () => {
+    it('typed defaultValue 兜底并与 url 合并', () => {
       window.history.replaceState(null, '', '/?count=5');
 
       const { result } = renderHook(() =>
         useUrlState({
           parsers: { count: parseAsInteger, size: parseAsInteger },
-          defaultSearchParams: { count: 0, size: 10 },
+          defaultValue: { count: 0, size: 10 },
         }),
       );
 
@@ -390,6 +390,77 @@ describe('useUrlState', () => {
       });
 
       expect(onChange).toHaveBeenCalledWith({ count: 7 }, 'count=7');
+    });
+  });
+
+  describe('defaultValue / clearOnDefault / withDefault', () => {
+    it('clearOnDefault 默认开启：写回值等于默认值的 key 不进 url，state 仍由默认兜底', () => {
+      const { result } = renderHook(() =>
+        useUrlState({ defaultValue: { a: 'x' } }),
+      );
+
+      act(() => {
+        result.current[1]({ a: 'x', b: '1' });
+      });
+
+      expect(window.location.search).toBe('?b=1');
+      expect(result.current[0]).toEqual({ a: 'x', b: '1' });
+    });
+
+    it('clearOnDefault: false 时默认值照常写入 url', () => {
+      const { result } = renderHook(() =>
+        useUrlState({ defaultValue: { a: 'x' }, clearOnDefault: false }),
+      );
+
+      act(() => {
+        result.current[1]({ a: 'x' });
+      });
+
+      expect(window.location.search).toBe('?a=x');
+    });
+
+    it('parser.withDefault：url 缺失或解析失败都回退默认值', () => {
+      window.history.replaceState(null, '', '/?bad=abc');
+
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: {
+            count: parseAsInteger.withDefault(1),
+            bad: parseAsInteger.withDefault(7),
+          },
+        }),
+      );
+
+      expect(result.current[0].count).toBe(1);
+      expect(result.current[0].bad).toBe(7);
+    });
+
+    it('withDefault + clearOnDefault：写默认值清出 url，非默认值正常写入', () => {
+      const { result } = renderHook(() =>
+        useUrlState({ parsers: { count: parseAsInteger.withDefault(1) } }),
+      );
+
+      act(() => {
+        result.current[1]({ count: 1 });
+      });
+      expect(window.location.search).toBe('');
+      expect(result.current[0].count).toBe(1);
+
+      act(() => {
+        result.current[1]({ count: 2 });
+      });
+      expect(window.location.search).toBe('?count=2');
+    });
+
+    it('defaultValue 选项优先级高于 parser.withDefault', () => {
+      const { result } = renderHook(() =>
+        useUrlState({
+          parsers: { count: parseAsInteger.withDefault(1) },
+          defaultValue: { count: 5 },
+        }),
+      );
+
+      expect(result.current[0].count).toBe(5);
     });
   });
 });
